@@ -257,9 +257,55 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
 .cv-meta{font-size:9.5pt;color:#465564}.cv-item ul{padding-left:16px;margin:4px 0}.cv-item li{margin:2px 0}
 .cv-foot{margin-top:12px;padding-top:7px;border-top:1px solid #ccd6d8;color:#465564;font-size:9pt}
 }
+
+/* Terminal identity — editorial portfolio, with a monitor-inspired frame */
+.terminal-boot[hidden]{display:none!important}
+@media screen{
+:root{--terminal:#112b2c;--terminal-ink:#dff6ed;--terminal-mint:#94eac8}
+.brandmark b{overflow:hidden;border-radius:10px;background:#163b39;border:1px solid #45817a}
+.brandmark b img{width:100%;height:100%;object-fit:cover;object-position:50% 48%;filter:brightness(1.18) contrast(.95)}
+.hero{padding-top:32px!important;padding-bottom:50px}
+.monitor-chrome{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--terminal);color:var(--terminal-ink);border-radius:20px 20px 0 0;font:11px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.02em}
+.monitor-dots{display:flex;gap:5px}.monitor-dots i{width:8px;height:8px;border-radius:50%;background:#e68a70}.monitor-dots i:nth-child(2){background:#e8c678}.monitor-dots i:nth-child(3){background:#83c9a6}
+.monitor-state{margin-left:auto;color:var(--terminal-mint);font-size:10px}
+.hero-grid{padding:clamp(22px,4.4vw,60px);border:1px solid var(--line);border-top:0;border-radius:0 0 22px 22px;background:var(--paper);box-shadow:var(--shadow);gap:clamp(24px,4vw,52px)}
+.hero-grid h1{font-size:clamp(2.65rem,5.5vw,5.2rem)}
+.hero-grid .kicker{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.07em}
+.hero-photo{border-radius:19px 19px 19px 50px;max-width:390px}
+.hero:after{content:"";display:block;margin:0 auto;width:86px;height:12px;background:var(--terminal);clip-path:polygon(24% 0,76% 0,100% 100%,0 100%)}
+.timeline .entry,.edu-list .edu{position:relative;padding-left:22px}
+.timeline .entry:before,.edu-list .edu:before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--line)}
+.timeline .entry:after,.edu-list .edu:after{content:"";position:absolute;left:-3px;top:32px;width:7px;height:7px;border-radius:50%;background:#4a9d89;box-shadow:0 0 0 3px var(--bg)}
+.terminal-boot{position:fixed;inset:0;z-index:200;display:grid;place-items:center;background:#0b1b1c;padding:20px;color:#e1f6ed;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.boot-window{width:min(620px,100%);min-height:240px;border:1px solid #436964;border-radius:16px;background:#102627;box-shadow:0 25px 90px #0007;overflow:hidden}
+.boot-chrome{display:flex;align-items:center;gap:12px;background:#1b3636;padding:13px 17px;font-size:12px}
+.boot-chrome>span:first-child{color:#8fdfb9;letter-spacing:3px}
+.boot-chrome button{margin-left:auto;border:1px solid #658a81;background:transparent;color:#e1f6ed;padding:7px 10px;border-radius:6px;cursor:pointer;font-size:11px}
+.boot-window pre{white-space:pre-wrap;overflow-wrap:anywhere;font:clamp(12px,3vw,15px)/1.9 ui-monospace,SFMono-Regular,Consolas,monospace;margin:25px 22px 0;color:#a5eccd;min-height:92px}
+.boot-cursor{display:block;width:8px;height:15px;background:#a5eccd;margin:7px 22px 18px;animation:terminal-blink .6s steps(1) infinite}
+@keyframes terminal-blink{50%{opacity:0}}
+@media(max-width:920px){.hero-grid{padding:22px;gap:25px}.hero-grid h1{font-size:clamp(2.7rem,10vw,4.7rem)}.hero-photo{max-width:330px}.hero{padding-top:16px!important}}
+@media(max-width:540px){.monitor-chrome{padding:10px 12px;gap:9px;font-size:10px}.monitor-state{font-size:9px}.hero-grid{padding:17px}.hero-grid .kicker{font-size:.65rem}.hero-grid .actions .btn{font-size:.78rem}}
+@media(prefers-reduced-motion:reduce){.terminal-boot{display:none!important}}
+}
+@media print{
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.cv-sheet{break-after:page}
+.cv-head{position:relative;border:0;border-top:16px solid #254242;background:#102829;color:#e9f7f2;padding:13px 15px;margin-bottom:14px}
+.cv-head h1{color:#fff;font-size:26pt}
+.cv-head .cv-role,.cv-head .cv-link{color:#a0e3c9}
+.cv-head .cv-portrait{float:right;width:24mm;height:30mm;object-fit:cover;object-position:center;margin:0 0 5px 10px;border:2px solid #95d8bf}
+.cv-head .cv-profile{clear:both;background:#fff;color:#192638;margin:12px -15px -13px!important;padding:11px 0 0}
+.cv-head .cv-avail{color:#fff}
+.cv-section h2{background:#eef3ef;border:0;border-left:3px solid #167267;padding:6px 8px}
+.cv-item{position:relative;margin-left:5px;padding-left:12px;border-left:1px solid #b4d0c7}
+.cv-item:before{content:"";position:absolute;left:-3.5px;top:4px;width:6px;height:6px;border-radius:50%;background:#167267}
+.cv-sheet .cv-foot{font-family:ui-monospace,monospace}
+}
 </style>
 </head>
 <body>
+<div class="terminal-boot" id="terminal-boot" hidden><div class="boot-window"><div class="boot-chrome"><span aria-hidden="true">● ● ●</span><span>~/portfolio</span><button type="button">Skip intro</button></div><pre aria-hidden="true"></pre><span class="boot-cursor" aria-hidden="true"></span></div></div>
 <a class="skip" href="#overview">Skip to content</a>
 <header class="topbar">
   <div class="shell topbar-inner">
@@ -282,6 +328,7 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
 <main>
 <section class="panel active" id="overview">
   <div class="shell hero">
+    <div class="monitor-chrome" aria-hidden="true"><span class="monitor-dots"><i></i><i></i><i></i></span><span>~/portfolio/resume</span><span class="monitor-state">● ONLINE</span></div>
     <div class="hero-grid">
       <div>
         <div class="kicker">AI &middot; Cybersecurity &middot; Industrial Engineering</div>
@@ -662,17 +709,17 @@ function cvModel(lang,now=new Date(),doc=document){
  const skills=all('#education .skillgroup').map(n=>I(txt('h3',n),'',all('p',n).map(clean)));
  const projects=all('#projects .project').map(n=>I(txt('h3',n),[txt('.tag',n),txt('.techline',n)].filter(Boolean).join(' | '),all('p:not(.techline):not(.projlink)',n).map(clean),href('.projlink a',n)));
  const motivation=all('#motivation .note').map(n=>I(txt('h3',n),'',all('p',n).map(clean)));
- const creative=all('#creative .creative-copy').map(n=>I(txt('h3',n),'',all(':scope > p',n).map(clean)));
+ const creative=all('#creative .creative-copy').map(n=>I(txt('h3',n),'',all(':scope > p',n).slice(0,1).map(clean)));
  const other=all('main > .panel').filter(n=>!['overview','professional','education','projects','motivation','creative'].includes(n.id)).map(n=>({h:txt('h2',n)||n.id,items:all('article,.note,.project',n).map(c=>I(txt('h3',c),'',all('p,li',c).map(clean),href('a[href^="http"]',c)))}));
  // Keep the application text-focused; exclude gallery images and camera gear.
  const sections=[{h:t('Berufserfahrung','Professional experience'),items:work},{h:t('Ausbildung & Studium','Education'),items:education},{h:t('Ausgewählte Projekte','Selected projects'),items:projects},{h:t('Technisches Profil','Technical profile'),items:skills},{h:title('motivation',t('Motivation','Motivation')),items:motivation},{h:title('creative',t('Weitere Erfahrung','Additional experience')),items:creative},...other].filter(s=>s.items.length);
  const contacts=all('#overview .contactline > span:not(.avail)').map(clean);
  if(contacts.length>1)sections.push({h:t('Sprachen','Languages'),items:[I(contacts.slice(1).join(' | '),'')]});
- return {name:txt('#overview h1').replace(/\.$/,''),role:txt('#overview .role'),date:fmt(now),start:fmt(start),iso:start.toISOString().slice(0,10),email:href('#overview a[href^="mailto:"]').replace(/^mailto:/,''),portfolio:'https://ferngro.github.io/Resumee/',location:contacts[0]||'',availability:t('Werkstudent · 20 Std./Woche · frühestens ab ','Working student · 20 h/week · available from ')+fmt(start),profile:txt('#overview .intro'),sections,pages:[]};
+ return {lang,name:txt('#overview h1').replace(/\.$/,''),role:txt('#overview .role'),date:fmt(now),start:fmt(start),iso:start.toISOString().slice(0,10),email:href('#overview a[href^="mailto:"]').replace(/^mailto:/,''),portfolio:'https://ferngro.github.io/Resumee/',location:contacts[0]||'',availability:t('Werkstudent · 20 Std./Woche · frühestens ab ','Working student · 20 h/week · available from ')+fmt(start),profile:txt('#overview .intro'),sections,pages:[]};
 }
 function paginateCV(m,measure,render=makePDF){
  const pages=[];let current=[];
- const fits=p=>{try{const result=render({...m,pages:pages.length?[[],p]:[p]},measure);return result.bounds[result.bounds.length-1]>=80;}catch(err){if(String(err).includes('overflow'))return false;throw err;}};
+ const fits=p=>{try{const result=render({...m,photo:null,pages:pages.length?[[],p]:[p]},measure);return result.bounds[result.bounds.length-1]>=64;}catch(err){if(String(err).includes('overflow'))return false;throw err;}};
  for(const section of m.sections){
    for(const item of section.items){
      const next=current.map(s=>({h:s.h,items:s.items.slice()}));
@@ -688,42 +735,132 @@ function paginateCV(m,measure,render=makePDF){
  return {...m,pages};
 }
 function makePDF(m,measure){
- const W=595.28,H=841.89,M=45,R=W-M,ink='0.10 0.15 0.22',muted='0.28 0.35 0.43',accent='0.00 0.39 0.40',objs=[null],pages=[],bounds=[];
- const add=s=>(objs.push(s),objs.length-1),cat=add(''),tree=add(''),f1=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'),f2=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
- const map={'’':146,'•':149,'–':150,'—':151,'€':128,'„':132,'“':147,'”':148};
+ const W=595.28,H=841.89,M=39,R=W-M,ink='0.11 0.16 0.19',muted='0.31 0.38 0.39',accent='0.05 0.37 0.35',night='0.065 0.14 0.15',light='0.88 0.98 0.94',mint='0.47 0.92 0.75',line='0.79 0.86 0.84',cream='0.98 0.98 0.96';
+ const objs=[null],pages=[],bounds=[],add=s=>(objs.push(s),objs.length-1);
+ const cat=add(''),tree=add(''),f1=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'),f2=add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>'),f3=add('<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>');
+ let img=0;
+ if(m.photo?.hex){const {hex,width,height}=m.photo;const stream=hex+'>';img=add(`<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter [/ASCIIHexDecode /DCTDecode] /Length ${stream.length} >>\nstream\n${stream}\nendstream`);}
+ const map={'’':146,'‘':145,'•':149,'–':150,'—':151,'€':128,'„':132,'“':147,'”':148,'…':133,'→':62,'↗':62,'×':215};
  const lit=s=>'('+Array.from(String(s),c=>{const n=map[c]??c.charCodeAt(0);return n===40||n===41||n===92?'\\'+String.fromCharCode(n):n<32||n>126?'\\'+(n>255?63:n).toString(8).padStart(3,'0'):c}).join('')+')';
  const N=v=>Number(v.toFixed(2));
+ const width=(s,size,font)=>font==='F3'?s.length*size*.6:measure(s,size,font);
  m.pages.forEach((sections,i)=>{
- let y=H-53,ops=[],links=[];
+ let y=H-39,ops=[],links=[];
  const text=(s,x,yy,size=11,f='F1',c=ink)=>ops.push(`BT /${f} ${size} Tf ${c} rg 1 0 0 1 ${N(x)} ${N(yy)} Tm ${lit(s)} Tj ET`);
- const rect=(x,yy,w,h,c)=>ops.push(`${c} rg ${N(x)} ${N(yy)} ${N(w)} ${N(h)} re f`);
- function wrap(s,x,width,size=11,f='F1',c=ink,leading=15){let line='';for(const word of s.split(/\s+/)){const next=line?line+' '+word:word;if(line&&measure(next,size,f)>width){text(line,x,y,size,f,c);y-=leading;line=word;}else line=next;}if(line){text(line,x,y,size,f,c);y-=leading;}}
- function link(s,url){text(s,M,y,9.2,'F1',accent);links.push(add(`<< /Type /Annot /Subtype /Link /Rect [${M} ${N(y-3)} ${N(Math.min(R,M+measure(s,9.2,'F1')))} ${N(y+10)}] /Border [0 0 0] /A << /S /URI /URI ${lit(url)} >> >>`));y-=13;}
- rect(M,y+17,32,3,accent);
- text(m.name,M,y-15,i?21:29,'F2');y-=i?33:40;
- wrap(m.role,M,R-M,i?11:13,'F2',accent,18);
- if(!i){wrap(m.location,M,R-M,10,'F1',muted,14);link(m.email,'mailto:'+m.email);link(m.portfolio,m.portfolio);wrap(m.availability,M,R-M,11,'F2',ink,16);y-=8;wrap(m.profile,M,R-M,11,'F1',ink,15);y-=10;}else y-=10;
- for(const sec of sections){text(sec.h.toUpperCase(),M,y,12,'F2',accent);y-=8;rect(M,y,R-M,.65,'0.83 0.87 0.89');y-=17;
- for(const it of sec.items){wrap(it.h,M,R-M,11.8,'F2',ink,15);if(it.m)wrap(it.m,M,R-M,9.6,'F1',muted,13);for(const b of it.b){const bullet=it.b.length>1;if(bullet)text('•',M,y,10,'F1',accent);wrap(b,M+(bullet?13:0),R-M-(bullet?13:0),10.7,'F1',ink,14.5);if(bullet)y-=2;}if(it.url)link(it.url,it.url);y-=8;}y-=6;}
- bounds.push(N(y));if(y<49)throw Error('CV page overflow '+(i+1)+': '+y);
- rect(M,39,R-M,.65,'0.83 0.87 0.89');text(m.date,M,24,9,'F1',muted);text(`${i+1} / ${m.pages.length}`,R-24,24,9,'F1',muted);
+ const rect=(x,yy,w,hh,c)=>ops.push(`${c} rg ${N(x)} ${N(yy)} ${N(w)} ${N(hh)} re f`);
+ const stroke=(x1,y1,x2,y2,c=line,w=.7)=>ops.push(`${c} RG ${w} w ${N(x1)} ${N(y1)} m ${N(x2)} ${N(y2)} l S`);
+ function dot(x,yy,r,c){const k=.55228475*r;ops.push(`${c} rg ${N(x+r)} ${N(yy)} m ${N(x+r)} ${N(yy+k)} ${N(x+k)} ${N(yy+r)} ${N(x)} ${N(yy+r)} c ${N(x-k)} ${N(yy+r)} ${N(x-r)} ${N(yy+k)} ${N(x-r)} ${N(yy)} c ${N(x-r)} ${N(yy-k)} ${N(x-k)} ${N(yy-r)} ${N(x)} ${N(yy-r)} c ${N(x+k)} ${N(yy-r)} ${N(x+r)} ${N(yy-k)} ${N(x+r)} ${N(yy)} c f`);}
+ function lines(s,max,size,f){const out=[];let cur='';for(let word of String(s).split(/\s+/)){if(!word)continue;const next=cur?cur+' '+word:word;if(cur&&width(next,size,f)>max){out.push(cur);cur='';}while(width(word,size,f)>max){let cut=1;while(cut<word.length&&width(word.slice(0,cut+1),size,f)<=max)cut++;out.push(word.slice(0,cut));word=word.slice(cut);}cur=cur?cur+' '+word:word;}if(cur)out.push(cur);return out;}
+ function wrap(s,x,max,size=11,f='F1',c=ink,leading=15){for(const l of lines(s,max,size,f)){text(l,x,y,size,f,c);y-=leading;}}
+ function annotate(s,url,x,yy,size,f='F1'){if(!url)return;links.push(add(`<< /Type /Annot /Subtype /Link /Rect [${N(x)} ${N(yy-3)} ${N(Math.min(R,x+width(s,size,f)))} ${N(yy+size)}] /Border [0 0 0] /A << /S /URI /URI ${lit(url)} >> >>`));}
+ function link(s,url,x=M+20,max=R-x){for(const l of lines(s,max,9.2,'F1')){text(l,x,y,9.2,'F1',accent);annotate(l,url,x,y,9.2);y-=13;}}
+ // Monitor-inspired top frame, with real portrait in first-page logo area.
+ const top=H-29,bottom=top-(i?72:165),x=M+17;
+ rect(M-2,bottom-2,R-M+4,top-bottom+4,'0.19 0.28 0.28');
+ rect(M,bottom,R-M,top-bottom,night);
+ rect(M,top-25,R-M,25,'0.11 0.22 0.22');
+ ['0.90 0.54 0.44','0.92 0.76 0.46','0.45 0.80 0.65'].forEach((c,k)=>dot(x+k*12,top-12,3.3,c));
+ text('~/portfolio/resume',x+48,top-15,8.8,'F3',light);
+ text('CV / '+(m.lang||'en').toUpperCase(),R-65,top-15,8.5,'F3',mint);
+ if(!i){
+   const photoX=R-112,photoY=bottom+13,photoW=98,photoH=119;
+   rect(photoX-3,photoY-3,photoW+6,photoH+6,mint);
+   rect(photoX,photoY,photoW,photoH,'0.16 0.27 0.26');
+   if(img){ops.push(`q ${photoW} 0 0 ${photoH} ${N(photoX)} ${N(photoY)} cm /Portrait Do Q`);}
+   else text('CG',photoX+29,photoY+50,25,'F2',light);
+   const max=photoX-x-14;
+   y=top-46;wrap('$ whoami',x,max,9,'F3',mint,15);
+   wrap(m.name,x,max,25,'F2',light,28);
+   wrap(m.role,x,max,12,'F2',mint,15);
+   wrap(m.location,x,max,9.4,'F1',light,13);
+   text(m.email,x,y,9.5,'F1',light);annotate(m.email,'mailto:'+m.email,x,y,9.5);y-=13;
+   const short=m.portfolio.replace(/^https?:\/\//,'');text(short,x,y,9,'F1',mint);annotate(short,m.portfolio,x,y,9);y-=11;
+   if(y<bottom+4)throw Error('CV header overflow');
+ }else{
+   text(m.name,x,top-47,19,'F2',light);
+   text(m.role,x,top-62,10,'F1',mint);
+ }
+ // A small monitor stand, not a full-page dark background.
+ rect(W/2-13,bottom-9,26,7,'0.19 0.28 0.28');rect(W/2-36,bottom-11,72,2,'0.19 0.28 0.28');
+ y=bottom-32;
+ if(!i){
+   const max=R-M-22;
+   const availLines=lines(m.availability,max,10.5,'F2');
+   const boxH=availLines.length*14+12;
+   rect(M,y+8-boxH,R-M,boxH,'0.90 0.96 0.93');rect(M,y+8-boxH,3,boxH,accent);
+   y-=3;wrap(m.availability,M+11,max,10.5,'F2',accent,14);
+   y-=13;wrap(m.profile,M,R-M,11,'F1',ink,15.5);y-=10;
+ }
+ let idx=0;
+ for(const sec of sections){
+   idx++;const header=String(idx).padStart(2,'0')+' /';
+   rect(M,y-6,R-M,23,cream);rect(M,y-6,3,23,accent);
+   text(header,M+10,y+2,9.5,'F3',accent);text(sec.h.toUpperCase(),M+44,y+2,11.5,'F2',ink);y-=26;
+   for(const it of sec.items){
+     const start=y,rail=M+5,tx=M+20,available=R-tx;
+     wrap(it.h,tx,available,11.8,'F2',ink,15.5);
+     if(it.m)wrap(it.m,tx,available,9.5,'F1',accent,13.2);
+     if(it.b.length)y-=1;
+     for(const b of it.b){const bullet=it.b.length>1;const bx=tx+(bullet?11:0);if(bullet)text('-',tx,y,10,'F3',muted);wrap(b,bx,R-bx,10.7,'F1',ink,14.7);if(bullet)y-=2;}
+     if(it.url)link(it.url,it.url,tx,available);
+     stroke(rail,start-2,rail,y+2,line,1);dot(rail,start+3,3.1,accent);
+     y-=10;
+   }
+   y-=5;
+ }
+ bounds.push(N(y));if(y<48)throw Error('CV page overflow '+(i+1)+': '+y);
+ stroke(M,40,R,40,line);text('$ export --pdf',M,25,8.5,'F3',accent);text(m.date,M+115,25,9,'F1',muted);text(`${i+1} / ${m.pages.length}`,R-25,25,9,'F1',muted);
  const stream=ops.join('\n'),c=add(`<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`),ann=links.length?' /Annots ['+links.map(j=>j+' 0 R').join(' ')+']':'';
- pages.push(add(`<< /Type /Page /Parent ${tree} 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R >> >> /Contents ${c} 0 R${ann} >>`));
+ const imageResource=img?` /XObject << /Portrait ${img} 0 R >>`:'';
+ pages.push(add(`<< /Type /Page /Parent ${tree} 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R /F3 ${f3} 0 R >>${imageResource} >> /Contents ${c} 0 R${ann} >>`));
  });
  objs[cat]=`<< /Type /Catalog /Pages ${tree} 0 R >>`;objs[tree]=`<< /Type /Pages /Count ${pages.length} /Kids [${pages.map(j=>j+' 0 R').join(' ')}] >>`;
  let pdf='%PDF-1.4\n',offsets=[0];for(let i=1;i<objs.length;i++){offsets.push(pdf.length);pdf+=`${i} 0 obj\n${objs[i]}\nendobj\n`;}
  const xref=pdf.length;pdf+=`xref\n0 ${objs.length}\n0000000000 65535 f \n`+offsets.slice(1).map(n=>String(n).padStart(10,'0')+' 00000 n \n').join('')+`trailer\n<< /Size ${objs.length} /Root ${cat} 0 R >>\nstartxref\n${xref}\n%%EOF\n`;return {pdf,bounds};
 }
+function portraitJPEG(img){
+ if(!img?.complete||!img.naturalWidth||!img.naturalHeight)return null;
+ const canvas=document.createElement('canvas');canvas.width=294;canvas.height=357;
+ const ctx=canvas.getContext('2d');if(!ctx)return null;
+ // Fit original portrait without distortion, preserving the outdoor setting.
+ const scale=Math.max(canvas.width/img.naturalWidth,canvas.height/img.naturalHeight);
+ const w=img.naturalWidth*scale,hh=img.naturalHeight*scale;
+ ctx.fillStyle='#182c2d';ctx.fillRect(0,0,canvas.width,canvas.height);
+ if('filter' in ctx)ctx.filter='brightness(1.18) contrast(0.96)';
+ ctx.drawImage(img,(canvas.width-w)/2,(canvas.height-hh)*.5,w,hh);
+ const data=canvas.toDataURL('image/jpeg',.88);if(!data.startsWith('data:image/jpeg;base64,'))return null;
+ const raw=atob(data.split(',')[1]);let hex='';for(let j=0;j<raw.length;j++)hex+=raw.charCodeAt(j).toString(16).padStart(2,'0');
+ return {hex,width:canvas.width,height:canvas.height};
+}
 function wireCV(){
  const root=document.documentElement,model=()=>cvModel(root.lang==='de'?'de':'en'),el=(tag,cls='',s='')=>{const n=document.createElement(tag);n.className=cls;n.textContent=s;return n;},link=(s,u)=>{const a=el('a','cv-link',s);a.href=u;return a;};
  function refresh(){const m=model(),de=root.lang==='de';document.querySelectorAll('#overview .avail,.contact .avail').forEach(n=>n.textContent=m.availability);const foot=document.querySelector('footer span');if(foot)foot.textContent='Christoph Grossklaus · CV & Portfolio · '+(de?'Abrufdatum: ':'Viewed: ')+m.date;document.querySelectorAll('[data-pdf]').forEach(a=>{a.textContent=a.classList.contains('btn')?(de?'Lebenslauf (PDF) ↓':'Download CV (PDF) ↓'):'PDF ↓';a.setAttribute('aria-label',de?'Aktuellen Lebenslauf als PDF herunterladen':'Download current CV as PDF');});return m;}
- function printLayout(m){try{m=paginateCV(m,measure);}catch(err){console.warn(err);m={...m,pages:[m.sections]};}document.getElementById('cv-print')?.remove();const doc=el('div','cv-print');doc.id='cv-print';m.pages.forEach((sections,i)=>{const page=el('section','cv-sheet'),head=el('header','cv-head');head.append(el('h1','',m.name),el('p','cv-role',m.role));if(!i)head.append(el('p','',m.location),link(m.email,'mailto:'+m.email),link(m.portfolio,m.portfolio),el('p','cv-avail',m.availability),el('p','cv-profile',m.profile));page.append(head);sections.forEach(s=>{const sec=el('section','cv-section');sec.append(el('h2','',s.h));s.items.forEach(it=>{const a=el('article','cv-item');a.append(el('h3','',it.h));if(it.m)a.append(el('p','cv-meta',it.m));if(it.b.length>1){const ul=el('ul');it.b.forEach(b=>ul.append(el('li','',b)));a.append(ul);}else if(it.b.length)a.append(el('p','',it.b[0]));if(it.url)a.append(link(it.url,it.url));sec.append(a);});page.append(sec);});page.append(el('div','cv-foot',m.date+' · '+(i+1)+' / '+m.pages.length));doc.append(page);});document.body.append(doc);}
+ function printLayout(m){try{m=paginateCV(m,measure);}catch(err){console.warn(err);m={...m,pages:[m.sections]};}document.getElementById('cv-print')?.remove();const doc=el('div','cv-print');doc.id='cv-print';m.pages.forEach((sections,i)=>{const page=el('section','cv-sheet'),head=el('header','cv-head');head.append(el('h1','',m.name),el('p','cv-role',m.role));if(!i){const photo=document.querySelector('#overview .hero-photo img');if(photo){const portrait=photo.cloneNode();portrait.className='cv-portrait';head.append(portrait);}}if(!i)head.append(el('p','',m.location),link(m.email,'mailto:'+m.email),link(m.portfolio,m.portfolio),el('p','cv-avail',m.availability),el('p','cv-profile',m.profile));page.append(head);sections.forEach(s=>{const sec=el('section','cv-section');sec.append(el('h2','',s.h));s.items.forEach(it=>{const a=el('article','cv-item');a.append(el('h3','',it.h));if(it.m)a.append(el('p','cv-meta',it.m));if(it.b.length>1){const ul=el('ul');it.b.forEach(b=>ul.append(el('li','',b)));a.append(ul);}else if(it.b.length)a.append(el('p','',it.b[0]));if(it.url)a.append(link(it.url,it.url));sec.append(a);});page.append(sec);});page.append(el('div','cv-foot',m.date+' · '+(i+1)+' / '+m.pages.length));doc.append(page);});document.body.append(doc);}
  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
  function measure(s,size,font){if(!ctx)return s.length*size*.58;ctx.font=(font==='F2'?'bold ':'')+size+'px Arial, Helvetica, sans-serif';return ctx.measureText(s).width*1.035;}
- function download(e){e.preventDefault();const m=refresh();try{const r=makePDF(paginateCV(m,measure),measure),url=URL.createObjectURL(new Blob([r.pdf],{type:'application/pdf'})),a=el('a');a.href=url;a.download='Christoph_Grossklaus_CV_'+root.lang.toUpperCase()+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(err){console.error(err);printLayout(m);window.print();}}
+ async function download(e){e.preventDefault();const m=refresh();try{const img=document.querySelector('#overview .hero-photo img');if(img&&!img.complete&&img.decode)await img.decode();const paginated=paginateCV(m,measure);const photo=portraitJPEG(document.querySelector('#overview .hero-photo img'));if(!photo)throw Error('Portrait not ready');const r=makePDF({...paginated,photo},measure),url=URL.createObjectURL(new Blob([r.pdf],{type:'application/pdf'})),a=el('a');a.href=url;a.download='Christoph_Grossklaus_CV_'+root.lang.toUpperCase()+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(err){console.error(err);printLayout(m);window.print();}}
  document.querySelectorAll('[data-pdf]').forEach(a=>a.addEventListener('click',download));window.addEventListener('beforeprint',()=>printLayout(refresh()));window.addEventListener('pageshow',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});new MutationObserver(refresh).observe(root,{attributes:true,attributeFilter:['lang']});refresh();
 }
 wireCV();
+function bootTerminal(){
+ const root=document.documentElement,source=document.querySelector('#overview .hero-photo img'),brand=document.querySelector('.brandmark b');
+ if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
+ const intro=document.getElementById('terminal-boot');
+ if(!intro)return;
+ const de=root.lang==='de',skip=intro.querySelector('button'),out=intro.querySelector('pre');
+ skip.textContent=de?'Intro überspringen':'Skip intro';
+ let seen=false;try{seen=sessionStorage.getItem('cv-boot-v3')==='1';}catch(e){}
+ if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches||(location.hash&&location.hash!=='#overview')){intro.remove();return;}
+ const commands=['$ cd ~/portfolio','$ ls resume/','$ open resume/index.html','> '+(de?'Profil geladen.':'Profile loaded.')];
+ let timers=[],closed=false;
+ function finish(){if(closed)return;closed=true;timers.forEach(clearTimeout);document.removeEventListener('keydown',escape);intro.remove();root.classList.remove('boot-active');try{sessionStorage.setItem('cv-boot-v3','1');}catch(e){}}
+ function escape(e){if(e.key==='Escape')finish();}
+ skip.addEventListener('click',finish);document.addEventListener('keydown',escape);
+ intro.hidden=false;root.classList.add('boot-active');
+ commands.forEach((command,i)=>timers.push(setTimeout(()=>{out.textContent+=(i?'\n':'')+command;},110+i*300)));
+ timers.push(setTimeout(finish,1520));
+}
+bootTerminal();
 </script>
 </body>
 </html>

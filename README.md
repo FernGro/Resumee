@@ -6,14 +6,14 @@ Bilingual, responsive CV website (DE / EN), hosted on GitHub Pages. All images a
 
 https://ferngro.github.io/Resumee/
 
-Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. The terminal boot animation is shown once per session, lasts about 1.5 seconds, can be skipped (including Escape), and is suppressed for reduced motion or direct section links. The monitor frame and avatar use the original embedded outdoor portrait.
+Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. The terminal boot animation runs on each entry to the overview and respects reduced-motion preferences; use Escape or Skip to dismiss.5 seconds, can be skipped (including Escape), and is suppressed for reduced motion or direct section links. The avatar uses the original embedded outdoor portrait. The integrated terminal supports help, ls, cd, open, whoami, cat profile, status, contact, pdf and clear. Commands navigate or read live page content; no shell or eval is exposed.
 
 ## CV and PDF export
 
 - PDF buttons generate a searchable, text-based A4 PDF in the browser when clicked. No embedded snapshots or server-side PDF service.
 - The print action uses a dedicated HTML print layout populated from the same current content.
 - Export reads the currently selected language directly from the website DOM: experience, education, skills, projects, motivation, creative experience, contact and languages.
-- Additional entries in the existing sections are automatically included; pagination adds pages rather than reducing font size. The first PDF page has a monitor-inspired header with the outdoor portrait, and the body uses numbered section headers and a timeline rail. The portrait is converted locally to JPEG and embedded into the searchable PDF; the gallery is intentionally omitted. The browser print fallback also includes the portrait.
+- Additional entries in the existing sections are automatically included; pagination adds pages rather than reducing font size. The first PDF page has a restrained terminal title bar, separated name/contact and portrait areas; the body uses numbered section headings and a timeline rail. The portrait is converted locally to JPEG and embedded into the searchable PDF; the gallery is intentionally omitted. The browser print fallback also includes the portrait.
 - Date and earliest availability are evaluated in Europe/Berlin. Availability uses the current month plus five months, on the first day (one application lead month plus three full notice months after that lead month; e.g. November 2026 → April 1, 2027). Review this policy if notice terms change.
 - The PDF date is the generation date, not a claim that the biographical content was reviewed on that date.
 

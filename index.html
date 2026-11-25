@@ -223,59 +223,7 @@ html.lb-open,body.lb-open{overflow:hidden}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 
-/* ---------- print ---------- */
-@page{margin:14mm}
-@media print{
-  .topbar,.mobile-nav,.lightbox,.actions,.tools,.gallery,.gallery-hint,.trail{display:none!important}
-  .js .panel,.panel{display:block!important}
-  body{background:#fff;color:#000;font-size:10.5pt;line-height:1.42}
-  .shell{width:100%}
-  h1{font-size:2.5rem;margin:0 0 10px}
-  .section{padding:16px 0}
-  .section h2{font-size:1.5rem}
-  .section-head{grid-template-columns:1fr;gap:4px;margin-bottom:16px}
-  .hero{padding:0 0 14px}
-  .hero-grid{grid-template-columns:1fr 150px;gap:22px;align-items:start}
-  .hero-photo{max-width:150px;border-radius:10px;box-shadow:none;margin:0}
-  .hero-photo:after,.hero-note{display:none}
-  .entry,.edu,.project,.note,.skillgroup,.creative-copy{break-inside:avoid}
-  .note-row,.skillcols,.projects,.creative-grid{grid-template-columns:1fr 1fr;gap:12px}
-  .project.feature{grid-template-columns:1fr}
-  .creative-copy{position:static}
-  .contact{margin-top:16px}
-  a[href^="http"]:after{content:" (" attr(href) ")";font-size:.72em;color:#555;word-break:break-all}
-  #education{break-before:page}
-}
-
 @media(min-width:921px) and (max-width:1150px){.brandmark span{display:none}.topbar-inner{gap:8px}.nav a{padding:8px 7px}}
-@page{size:A4;margin:13mm}
-@media print{ :root,:root[data-theme="dark"],:root[data-theme="light"]{--bg:#fff!important;--paper:#fff!important;--ink:#171d29!important;--muted:#424b59!important;--line:#dfe3e9!important;--navy:#3f496d!important;--navy-deep:#303853!important;--navy-soft:#eceef5!important;color-scheme:light!important} .skip,.pdf-hint{display:none!important} .hero-photo{order:0} .contactline{display:flex} .section-head{break-after:avoid} #motivation .note-row{margin-top:0} #education{break-before:auto} .section{padding:12px 0} .entry,.edu{padding:12px 0} .project,.note{padding:14px;min-height:0} .project.feature,.project.full{grid-column:1/-1} .creative-grid{grid-template-columns:1fr} .creative-copy p{margin:6px 0} .creative-links{margin-top:8px} .creative-links a{padding:5px 0} .contact-links{display:none} .mobile-nav{display:none!important} footer{padding:8px 0} }
-
-@media print{
-html{font-size:12px}body{font-size:9.5pt;line-height:1.35;letter-spacing:0}.hero-grid{grid-template-columns:1fr 115px;gap:16px}.hero-photo{max-width:115px}.hero{padding:0 0 6px}h1{font-size:2.7rem}.intro{margin-top:10px}.contactline{margin-top:10px;padding-top:8px}.section-head{margin-bottom:10px}.section-intro{margin-top:6px}.section h2{font-size:1.7rem}.section{padding:8px 0}.note-row,.skillcols{gap:8px;margin-top:10px}.note,.project{padding:9px;border-radius:10px}.note p,.skillgroup p{font-size:.93rem}.entry,.edu{padding:8px 0;gap:12px}.entry{grid-template-columns:90px 1fr}.edu{grid-template-columns:90px 1fr auto}.edu .status{justify-self:end}.bullets{gap:4px;margin-top:6px}.entry p{margin-top:4px}.skillgroup{padding-top:6px}.projects{gap:8px}.project h3{margin:4px 0}.techline{margin-top:7px!important}.projlink{margin-top:4px!important}.project.feature{gap:5px}.creative-copy h3{margin:0 0 3px}.creative-links{margin-top:4px}.creative-links a{padding:3px 0}.contact{margin-top:8px;padding:8px 0;break-inside:avoid}.footer-row{padding-top:5px}#professional,#projects{break-before:page}a[href^="http"]:after{content:none}.hero-photo img{object-position:center}
-}
-
-@media print{#professional .note-row,.creative-copy > p:nth-of-type(2),.creative-links,.contact{display:none!important}#creative .section-intro{display:none}.creative-copy{break-inside:avoid}#creative .section-head{margin-bottom:5px}#creative .creative-copy h3{font-size:1.1rem}#creative .creative-copy p{margin:3px 0}.footer-row{justify-content:space-between}}
-
-/* 2026-11-25: compact print layout and profile-photo tonal correction */
-.hero-photo img{filter:brightness(1.22) contrast(.90)}
-@page{size:A4;margin:11mm 12mm}
-@media print{
-  #professional,#projects{break-before:auto}
-  #education{break-before:page}
-  html{font-size:11.5px}body{font-size:9.2pt;line-height:1.3}
-  .hero-grid{grid-template-columns:1fr 106px;gap:12px}.hero-photo{max-width:106px}
-  .hero{padding:0 0 5px}h1{font-size:2.6rem;margin:0 0 6px}.intro{margin-top:7px}.contactline{margin-top:7px;padding-top:6px}
-  .section{padding:6px 0}.section-head{margin-bottom:6px;gap:3px}.section h2{font-size:1.55rem}.section-intro{margin-top:4px}
-  .note-row,.skillcols,.projects{gap:6px;margin-top:6px}.note,.project{padding:7px;border-radius:7px}.note p,.skillgroup p{font-size:.93rem;line-height:1.25}
-  .entry,.edu{padding:6px 0;gap:10px}.entry{grid-template-columns:87px 1fr}.edu{grid-template-columns:87px 1fr auto}.bullets{gap:3px;margin-top:4px}.entry p{margin-top:3px}
-  .skillgroup{padding-top:4px}.project.feature,.project.full{grid-column:auto}.project.feature{display:block}.project h3{margin:3px 0}.techline{margin-top:4px!important}.projlink{margin-top:3px!important}
-  #education .edu{padding:4px 0}#education .section-intro,#projects .section-intro{display:none}
-  #projects .project{padding:6px}#projects .project p:not(.techline):not(.projlink){font-size:8.6pt;line-height:1.23}#projects .project h3{font-size:1.05rem;line-height:1.15}#projects .techline{font-size:.66rem;line-height:1.2}
-  #creative .section-head{margin-bottom:3px}.footer-row{padding-top:3px}footer{padding:3px 0}
-}
-
-
 /* Portfolio 2.0 — non-blocking motion and source-code proof */
 @media screen{
 .hero{position:relative;isolation:isolate;overflow:hidden}
@@ -680,7 +628,7 @@ const groups = [
 ['.creative-links a span',['Webdesign ↗','Webdesign ↗','Video ↗','Musikvideo ↗']],['.gallery-hint',['Foto antippen zum Vergrößern – wischen oder Pfeiltasten zum Blättern.']],['.contact h3',['Auf der Suche nach einer Werkstudentenstelle in KI × Cybersecurity.']],['.contact > div:first-child > p:not(.avail)',['Besonders interessiert an angewandter KI, KI-Sicherheit, Produktsicherheit und technischer Automatisierung.']],['.contact .avail',['<b>20 Std. / Woche nach Kündigungsfrist</b> · begleitend zum Masterstudium']],['.contact-links a:first-child',['E-Mail']],['footer span',['Christoph Grossklaus · CV & Portfolio · Verfügbarkeit dynamisch berechnet','Responsiv · offline nutzbar · kein Build erforderlich']],
 ['[data-pdf]',['PDF ↓','Lebenslauf (PDF) ↓','PDF ↓']],['[data-pdf-view]',['Drucken / PDF ↗']]
 ];
-const entries = groups.flatMap(([selector, de])=>{const nodes=[...document.querySelectorAll(selector)];if(nodes.length!==de.length)throw Error('Translation mismatch: '+selector+' '+nodes.length+'/'+de.length);return nodes.map((el,i)=>({el,en:el.innerHTML,de:de[i]}));});
+const entries = groups.flatMap(([selector, de])=>{const nodes=[...document.querySelectorAll(selector)];if(nodes.length!==de.length)console.warn('Translation count differs: '+selector);return nodes.map((el,i)=>({el,en:el.innerHTML,de:de[i]??el.innerHTML}));});
 const attrs=[['#mainNav','aria-label','Lebenslauf-Navigation'],['#mobileNav','aria-label','Mobile Lebenslauf-Navigation'],['#gallery','aria-label','Fotoauswahl'],['#lightbox','aria-label','Fotoansicht'],['[data-close]','aria-label','Fotoansicht schließen'],['[data-step="-1"]','aria-label','Vorheriges Foto'],['[data-step="1"]','aria-label','Nächstes Foto'],['#overview .hero-photo img','alt','Christoph Grossklaus auf einem Alpengrat mit gelbem Rucksack']];
 const attrEntries=attrs.map(([s,k,de])=>{const el=document.querySelector(s);return {el,k,de,en:el.getAttribute(k)};});
 const labels=['Namibia','Alpen','Wildtiere','Wildtiere','Wildtiere','Surfen','Sternenhimmel'];
@@ -695,43 +643,49 @@ document.querySelectorAll('[data-pdf-view]').forEach(el=>el.addEventListener('cl
 })();
 </script>
 <script>
-function cvModel(lang, now=new Date()){
- const de=lang==='de', t=(a,b)=>de?a:b;
- const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'numeric'}).formatToParts(now);
+function cvModel(lang,now=new Date(),doc=document){
+ const de=lang==='de',t=(a,b)=>de?a:b;
+ const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Berlin',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(now);
  const p=k=>Number(parts.find(x=>x.type===k).value);
- // Application lead month + three full notice months; next month's first day.
+ // Application lead month + three full notice months.
  const start=new Date(Date.UTC(p('year'),p('month')-1+5,1));
  const fmt=d=>new Intl.DateTimeFormat(de?'de-DE':'en-GB',{timeZone:'Europe/Berlin',day:'numeric',month:'long',year:'numeric'}).format(d);
- const I=(h,m,b=[],url='')=>({h,m,b,url}), S=(h,items)=>({h,items});
- return {name:'Christoph Grossklaus',role:'Software Engineer | AI Automation & Cybersecurity',date:fmt(now),start:fmt(start),iso:start.toISOString().slice(0,10),email:'c.grossklaus@hotmail.com',portfolio:'https://ferngro.github.io/Resumee/',location:t('Murnau am Staffelsee, Deutschland','Murnau am Staffelsee, Germany'),availability:t('Werkstudent · 20 Std./Woche · frühestens ab ','Working student · 20 h/week · available from ')+fmt(start),profile:t('Software Engineer mit industrieller Berufserfahrung und laufendem Informatik-Masterstudium. Ich verbinde maschinennahe Softwareentwicklung, Produktsicherheit und KI-gestützte Automatisierung. Mein Ziel: sichere, wartbare KI-Anwendungen mit konkretem Nutzen für technische und betriebliche Prozesse.','Software engineer with industrial experience and ongoing master’s studies in computer science. I connect machine-level software, product security and AI-assisted automation. My goal is to build secure, maintainable AI applications that solve real engineering and business problems.'),
- pages:[
- [S(t('Berufserfahrung','Professional experience'),[
- I('Software Engineer','DORST Technologies GmbH & Co. KG | 07/2023 – '+t('heute','present'),t([
- 'Industrielle Steuerungssoftware in C und Structured Text; virtuelle Inbetriebnahme, I/O-Tests, Systemintegration und Fehlersuche.',
- 'Koordination der CRA-Vorbereitung: Schwachstellenmanagement, Produktsicherheitsprozesse und technische Nachweise.',
- 'Konzeption einer CMDB-Datenbasis und von Import-/Parser-Workflows für Maschinenbackups und Konfigurationsdaten.',
- 'Erprobung LLM-gestützter Automatisierung für strukturierte Datenextraktion, Engineering-Wissen und wiederkehrende Prozesse.'
- ],[
- 'Industrial control software in C and Structured Text; virtual commissioning, I/O testing, system integration and troubleshooting.',
- 'Coordination of Cyber Resilience Act readiness, vulnerability management, product-security workflows and technical evidence.',
- 'Design of a CMDB data foundation and import/parser workflows for machine backups and configuration data.',
- 'Exploration of LLM-assisted automation for structured data extraction, engineering knowledge and repetitive workflows.'
- ]))]),
- S(t('Ausbildung & Studium','Education'),[
- I(t('M.Sc. Informatik (laufend)','M.Sc. Computer Science (ongoing)'),t('FernUniversität in Hagen | seit 10/2026','FernUniversität in Hagen | since 10/2026'),[t('Machine Learning, Data Engineering for Data Science; Fokus KI und Cybersecurity.','Machine Learning, Data Engineering for Data Science; focus on AI and cybersecurity.')]),
- I(t('Mathematisch-technische Softwareentwicklung','Mathematical & Technical Software Development'),t('FernUniversität in Hagen | Zertifikatsstudium 2026','FernUniversität in Hagen | certificate programme, 2026'),[t('Informatik-Grundstudium auf Bachelor-Niveau; 45/60 ECTS erworben, 15 offen. Schwerpunkt nach Masterzulassung verlagert.','Undergraduate computer science foundations; 45/60 ECTS earned, 15 outstanding. Focus shifted after admission to the master’s programme.')]),
- I(t('Bachelor – Maschinenbau','Bachelor – Mechanical Engineering'),t('Hochschule München | 2019–2023','Munich University of Applied Sciences | 2019–2023')),
- I(t('Ausbildung zum Mechatroniker','Mechatronics Technician Apprenticeship'),'DORST Technologies GmbH & Co. KG | 2018–2022')])],
- [S(t('Ausgewählte Projekte','Selected projects'),[
- I('TIA Openness Exporter','Open Source · C# · JSON · SHA-256',[t('Exportiert Siemens TIA Portal-Projektdaten in normalisiertes JSON: Asset-, Firmware- und Softwareinventare, Sicherheitskonfiguration, CRA-Gap-Analyse und gehashte Nachweismanifeste.','Exports Siemens TIA Portal project data to normalised JSON: asset, firmware and software inventories, security configuration, CRA gap analysis and hashed evidence manifests.')],'https://github.com/FernGro/TIAExporter'),
- I(t('KI-Automatisierung im Engineering','AI automation in engineering'),t('In Erprobung · LLMs · Agenten · n8n · APIs','In exploration · LLMs · agents · n8n · APIs'),[t('Prototypische Workflows für strukturierte Datenextraktion und Automatisierung technischer Routineprozesse; Vertiefung von AI-Harness-Design.','Prototype workflows for structured extraction and automation of routine engineering tasks; developing AI harness design skills.')]),
- I('WG Garden App','Open Source · TypeScript · Next.js · Supabase',[t('Web-App mit Authentifizierung, Row-Level Security, Einladungs- und Aufgabenfreigabe-Workflow sowie Fairness-Prognose.','Web app with authentication, row-level security, invitations, task approval and a fairness forecast.')],'https://github.com/FernGro/GartenWebApp'),
- I(t('Self-Hosting & Infrastruktur','Self-hosting & infrastructure'),'Linux · Docker · DNS',[t('Eigenes Serverumfeld für Experimente mit lokalen Diensten und datenschutzorientierten Netzwerken.','Personal server environment for experiments with local services and privacy-oriented networking.')])]),
- S(t('Technisches Profil','Technical profile'),[
- I(t('Praktisch eingesetzt','Applied experience'),'', [t('C, Structured Text, Git, Linux, Docker, PostgreSQL, FastAPI, JSON Schema, SPS, VIBN, CRA, Vulnerability Management, CSAF / CMDB / SBOM-Konzepte.','C, Structured Text, Git, Linux, Docker, PostgreSQL, FastAPI, JSON Schema, PLC, virtual commissioning, CRA, vulnerability management, CSAF / CMDB / SBOM concepts.')]),
- I(t('In Vertiefung','Developing expertise'),'', [t('Python, SQL, LLM-Anwendungen, agentische Workflows, n8n, Machine Learning, Data Engineering, Cybersecurity.','Python, SQL, LLM applications, agentic workflows, n8n, machine learning, data engineering, cybersecurity.')]),
- I(t('Sprachen & weitere Erfahrung','Languages & additional experience'),'', [t('Deutsch (Muttersprache), Englisch (fließend). Seit 2019 zusätzlich Webdesign, Foto- und Videoproduktion (GbR).','German (native), English (fluent). Additional experience in web design, photography and video production since 2019 (partnership).')])])]
- ]};
+ const all=(q,scope=doc)=>Array.from(scope.querySelectorAll(q));
+ const one=(q,scope=doc)=>scope.querySelector(q);
+ const clean=node=>{if(!node)return '';const copy=node.cloneNode(true);all('br',copy).forEach(br=>br.replaceWith(' '));return copy.textContent.replace(/\s+/g,' ').trim();};
+ const txt=(q,scope=doc)=>clean(one(q,scope));
+ const href=(q,scope=doc)=>one(q,scope)?.getAttribute('href')||'';
+ const I=(h,m,b=[],url='')=>({h,m,b:b.filter(Boolean),url});
+ const title=(id,fallback)=>txt('.nav a[data-tab="'+id+'"]')||fallback;
+ const work=all('#professional .entry').map(n=>I(txt('h3',n),[txt('.org',n),txt('.date',n)].filter(Boolean).join(' | '),[...all('p',n).map(clean),...all('.bullets li',n).map(clean)]));
+ const education=all('#education .edu').map(n=>I(txt('h3',n),[txt('.where',n),txt('.year',n)].filter(Boolean).join(' | '),all('p',n).map(p=>{const c=p.cloneNode(true);all('.where',c).forEach(x=>x.remove());return clean(c);}).filter(Boolean)));
+ const skills=all('#education .skillgroup').map(n=>I(txt('h3',n),'',all('p',n).map(clean)));
+ const projects=all('#projects .project').map(n=>I(txt('h3',n),[txt('.tag',n),txt('.techline',n)].filter(Boolean).join(' | '),all('p:not(.techline):not(.projlink)',n).map(clean),href('.projlink a',n)));
+ const motivation=all('#motivation .note').map(n=>I(txt('h3',n),'',all('p',n).map(clean)));
+ const creative=all('#creative .creative-copy').map(n=>I(txt('h3',n),'',all(':scope > p',n).map(clean)));
+ const other=all('main > .panel').filter(n=>!['overview','professional','education','projects','motivation','creative'].includes(n.id)).map(n=>({h:txt('h2',n)||n.id,items:all('article,.note,.project',n).map(c=>I(txt('h3',c),'',all('p,li',c).map(clean),href('a[href^="http"]',c)))}));
+ // Keep the application text-focused; exclude gallery images and camera gear.
+ const sections=[{h:t('Berufserfahrung','Professional experience'),items:work},{h:t('Ausbildung & Studium','Education'),items:education},{h:t('Ausgewählte Projekte','Selected projects'),items:projects},{h:t('Technisches Profil','Technical profile'),items:skills},{h:title('motivation',t('Motivation','Motivation')),items:motivation},{h:title('creative',t('Weitere Erfahrung','Additional experience')),items:creative},...other].filter(s=>s.items.length);
+ const contacts=all('#overview .contactline > span:not(.avail)').map(clean);
+ if(contacts.length>1)sections.push({h:t('Sprachen','Languages'),items:[I(contacts.slice(1).join(' | '),'')]});
+ return {name:txt('#overview h1').replace(/\.$/,''),role:txt('#overview .role'),date:fmt(now),start:fmt(start),iso:start.toISOString().slice(0,10),email:href('#overview a[href^="mailto:"]').replace(/^mailto:/,''),portfolio:'https://ferngro.github.io/Resumee/',location:contacts[0]||'',availability:t('Werkstudent · 20 Std./Woche · frühestens ab ','Working student · 20 h/week · available from ')+fmt(start),profile:txt('#overview .intro'),sections,pages:[]};
+}
+function paginateCV(m,measure,render=makePDF){
+ const pages=[];let current=[];
+ const fits=p=>{try{const result=render({...m,pages:pages.length?[[],p]:[p]},measure);return result.bounds[result.bounds.length-1]>=80;}catch(err){if(String(err).includes('overflow'))return false;throw err;}};
+ for(const section of m.sections){
+   for(const item of section.items){
+     const next=current.map(s=>({h:s.h,items:s.items.slice()}));
+     if(next.length&&next[next.length-1].h===section.h)next[next.length-1].items.push(item);else next.push({h:section.h,items:[item]});
+     if(fits(next)){current=next;continue;}
+     if(current.length){pages.push(current);current=[];}
+     const single=[{h:section.h,items:[item]}];
+     if(!fits(single))throw Error('CV page overflow: individual item too long: '+item.h);
+     current=single;
+   }
+ }
+ if(current.length)pages.push(current);
+ return {...m,pages};
 }
 function makePDF(m,measure){
  const W=595.28,H=841.89,M=45,R=W-M,ink='0.10 0.15 0.22',muted='0.28 0.35 0.43',accent='0.00 0.39 0.40',objs=[null],pages=[],bounds=[];
@@ -763,11 +717,11 @@ function makePDF(m,measure){
 function wireCV(){
  const root=document.documentElement,model=()=>cvModel(root.lang==='de'?'de':'en'),el=(tag,cls='',s='')=>{const n=document.createElement(tag);n.className=cls;n.textContent=s;return n;},link=(s,u)=>{const a=el('a','cv-link',s);a.href=u;return a;};
  function refresh(){const m=model(),de=root.lang==='de';document.querySelectorAll('#overview .avail,.contact .avail').forEach(n=>n.textContent=m.availability);const foot=document.querySelector('footer span');if(foot)foot.textContent='Christoph Grossklaus · CV & Portfolio · '+(de?'Abrufdatum: ':'Viewed: ')+m.date;document.querySelectorAll('[data-pdf]').forEach(a=>{a.textContent=a.classList.contains('btn')?(de?'Lebenslauf (PDF) ↓':'Download CV (PDF) ↓'):'PDF ↓';a.setAttribute('aria-label',de?'Aktuellen Lebenslauf als PDF herunterladen':'Download current CV as PDF');});return m;}
- function printLayout(m){document.getElementById('cv-print')?.remove();const doc=el('div','cv-print');doc.id='cv-print';m.pages.forEach((sections,i)=>{const page=el('section','cv-sheet'),head=el('header','cv-head');head.append(el('h1','',m.name),el('p','cv-role',m.role));if(!i)head.append(el('p','',m.location),link(m.email,'mailto:'+m.email),link(m.portfolio,m.portfolio),el('p','cv-avail',m.availability),el('p','cv-profile',m.profile));page.append(head);sections.forEach(s=>{const sec=el('section','cv-section');sec.append(el('h2','',s.h));s.items.forEach(it=>{const a=el('article','cv-item');a.append(el('h3','',it.h));if(it.m)a.append(el('p','cv-meta',it.m));if(it.b.length>1){const ul=el('ul');it.b.forEach(b=>ul.append(el('li','',b)));a.append(ul);}else if(it.b.length)a.append(el('p','',it.b[0]));if(it.url)a.append(link(it.url,it.url));sec.append(a);});page.append(sec);});page.append(el('div','cv-foot',m.date+' · '+(i+1)+' / '+m.pages.length));doc.append(page);});document.body.append(doc);}
+ function printLayout(m){try{m=paginateCV(m,measure);}catch(err){console.warn(err);m={...m,pages:[m.sections]};}document.getElementById('cv-print')?.remove();const doc=el('div','cv-print');doc.id='cv-print';m.pages.forEach((sections,i)=>{const page=el('section','cv-sheet'),head=el('header','cv-head');head.append(el('h1','',m.name),el('p','cv-role',m.role));if(!i)head.append(el('p','',m.location),link(m.email,'mailto:'+m.email),link(m.portfolio,m.portfolio),el('p','cv-avail',m.availability),el('p','cv-profile',m.profile));page.append(head);sections.forEach(s=>{const sec=el('section','cv-section');sec.append(el('h2','',s.h));s.items.forEach(it=>{const a=el('article','cv-item');a.append(el('h3','',it.h));if(it.m)a.append(el('p','cv-meta',it.m));if(it.b.length>1){const ul=el('ul');it.b.forEach(b=>ul.append(el('li','',b)));a.append(ul);}else if(it.b.length)a.append(el('p','',it.b[0]));if(it.url)a.append(link(it.url,it.url));sec.append(a);});page.append(sec);});page.append(el('div','cv-foot',m.date+' · '+(i+1)+' / '+m.pages.length));doc.append(page);});document.body.append(doc);}
  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
  function measure(s,size,font){if(!ctx)return s.length*size*.58;ctx.font=(font==='F2'?'bold ':'')+size+'px Arial, Helvetica, sans-serif';return ctx.measureText(s).width*1.035;}
- function download(e){e.preventDefault();const m=refresh();try{const r=makePDF(m,measure),url=URL.createObjectURL(new Blob([r.pdf],{type:'application/pdf'})),a=el('a');a.href=url;a.download='Christoph_Grossklaus_CV_'+root.lang.toUpperCase()+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(err){console.error(err);printLayout(m);window.print();}}
- document.querySelectorAll('[data-pdf]').forEach(a=>a.addEventListener('click',download));window.addEventListener('beforeprint',()=>printLayout(refresh()));window.addEventListener('pageshow',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});new MutationObserver(refresh).observe(root,{attributes:true,attributeFilter:['lang']});printLayout(refresh());
+ function download(e){e.preventDefault();const m=refresh();try{const r=makePDF(paginateCV(m,measure),measure),url=URL.createObjectURL(new Blob([r.pdf],{type:'application/pdf'})),a=el('a');a.href=url;a.download='Christoph_Grossklaus_CV_'+root.lang.toUpperCase()+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(err){console.error(err);printLayout(m);window.print();}}
+ document.querySelectorAll('[data-pdf]').forEach(a=>a.addEventListener('click',download));window.addEventListener('beforeprint',()=>printLayout(refresh()));window.addEventListener('pageshow',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});new MutationObserver(refresh).observe(root,{attributes:true,attributeFilter:['lang']});refresh();
 }
 wireCV();
 </script>

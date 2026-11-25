@@ -11,7 +11,7 @@
 <meta property="og:title" content="Christoph Grossklaus — CV &amp; Portfolio">
 <meta property="og:description" content="Software Engineer | AI Automation &amp; Cybersecurity">
 <title>Christoph Grossklaus — CV &amp; Portfolio</title>
-<script>document.documentElement.classList.add("js")</script>
+<script>document.documentElement.classList.add("js");try{if((!location.hash||location.hash==="#overview")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&new URLSearchParams(location.search).get("view")!=="recruiter")document.documentElement.classList.add("terminal-preboot");}catch(e){}</script>
 <style>
 /* ---------- tokens ---------- */
 :root{
@@ -303,33 +303,60 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
 .cv-sheet .cv-foot{font-family:ui-monospace,monospace}
 }
 
-/* V4: one coherent terminal, no stacked monitor frames or decorative stands. */
+
+/* V5 — single terminal window; fullscreen boot -> measured dock. */
 [hidden]{display:none!important}
 @media screen{
-.terminal-shell{margin-top:14px;color:var(--ink);font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;border-bottom:1px solid var(--line);padding:0 0 9px}
-#terminal-form{display:flex;align-items:center;gap:10px;min-width:0;margin:0}
-#terminal-path{color:var(--muted);white-space:nowrap;font-size:11px}
-.terminal-prompt{color:#318b77;font-weight:800}
-#terminal-input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:var(--ink);font:inherit;padding:9px 3px;outline-offset:0}
-#terminal-input::placeholder{color:var(--muted)}
-#terminal-form button,#terminal-close{background:transparent;border:0;color:var(--navy-deep);font:inherit;cursor:pointer;min-width:36px;min-height:34px}
-.terminal-feedback{display:flex;align-items:center;justify-content:space-between;min-height:18px;color:var(--muted);font-size:11px;overflow-wrap:anywhere}
-#terminal-status{min-width:0}
-#terminal-output{margin:8px 0 0;padding:12px 15px;border-left:2px solid #328b78;background:var(--paper);white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;color:var(--ink)}
-.hero{overflow:visible;padding:36px 0 54px!important}
-.hero:after{display:none!important}
-.hero:before{display:none!important}
+:root{scrollbar-gutter:stable}
+html{scroll-padding-top:175px}
+.section,.hero{scroll-margin-top:175px}
+.terminal-dock{position:sticky;top:70px;z-index:49;margin-top:10px;min-height:86px}
+.portfolio-terminal{box-sizing:border-box;background:#101719;color:#d9e6e2;border:1px solid #354849;border-radius:10px;box-shadow:0 5px 18px #0b191b18;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;overflow:hidden}
+.terminal-titlebar{display:flex;align-items:center;gap:10px;background:#263133;color:#becdca;min-height:27px;padding:3px 12px;font-size:10px}
+.terminal-title{flex:1;min-width:0;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.terminal-lights{display:flex;gap:5px;align-items:center}
+.terminal-lights i{width:8px;height:8px;border-radius:50%;background:#ec756b}.terminal-lights i:nth-child(2){background:#eac166}.terminal-lights i:nth-child(3){background:#73c69b}
+.terminal-titlebar button{background:transparent;border:0;color:#c8d7d2;font:inherit;cursor:pointer;padding:2px 6px;white-space:nowrap}
+#terminal-form{display:flex;align-items:center;gap:8px;min-width:0;padding:3px 12px;margin:0}
+.terminal-user{color:#83dcae;font-weight:650;white-space:nowrap}
+#terminal-path,.terminal-dir{color:#83bbee;white-space:nowrap}
+.terminal-prompt,.terminal-last-prompt{color:#e2e8e4}
+#terminal-input{flex:1;min-width:0;width:100%;border:0;background:transparent;color:#e2eee9;caret-color:#86e6ae;font:inherit;padding:6px 0;outline-offset:1px}
+#terminal-input::placeholder{color:#899e99}
+#terminal-form button,#terminal-close{background:transparent;border:0;color:#98d8b9;font:inherit;cursor:pointer;min-width:28px;min-height:26px}
+.terminal-feedback{display:flex;align-items:center;gap:7px;padding:0 12px 6px;color:#91a7a2;font-size:11px;min-height:22px;overflow-wrap:anywhere}
+#terminal-status{flex:1;min-width:0}
+#terminal-output{margin:0;padding:8px 12px 12px;border-top:1px solid #344645;white-space:pre-wrap;overflow-wrap:anywhere;max-height:min(320px,40vh);overflow:auto;color:#cbded7}
+.terminal-demo-controls{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.terminal-demo-controls button{font:inherit;background:#233a36;border:1px solid #527a6d;color:#d9f4e7;padding:5px 8px;border-radius:4px;cursor:pointer}
+.terminal-preboot,.boot-active{overflow:hidden}
+.terminal-preboot #portfolio-terminal,.portfolio-terminal.is-booting{position:fixed;inset:0;z-index:2000;width:100%;height:100%;height:100dvh;border:0;border-radius:0;box-shadow:none;background:#0b1113}
+.terminal-preboot #terminal-form,.terminal-preboot .terminal-feedback,.portfolio-terminal.is-booting #terminal-form,.portfolio-terminal.is-booting .terminal-feedback,.portfolio-terminal.is-booting #terminal-palette,.portfolio-terminal.is-booting #terminal-output{visibility:hidden}
+.portfolio-terminal.is-booting .terminal-titlebar{min-height:42px;padding:8px 20px;font-size:12px}
+.terminal-boot-log{position:absolute;top:clamp(76px,26vh,260px);left:clamp(22px,10vw,150px);right:clamp(16px,8vw,110px);font-size:clamp(15px,2.4vw,25px);line-height:1.85}
+.terminal-welcome{font-size:.65em;color:#78908b;margin-bottom:12px}
+.boot-prompt{display:flex;align-items:baseline;flex-wrap:wrap;gap:.5em}
+.terminal-caret{display:inline-block;width:.55em;height:1em;background:#8ce4b2;align-self:center;animation:terminal-blink .75s steps(1) infinite}
+#terminal-boot-result{color:#8ce4b2;margin-top:10px;font-size:.8em}
+.portfolio-terminal.is-docking .terminal-boot-log,.portfolio-terminal.is-docking #terminal-skip{opacity:0;transition:opacity .18s ease}
+.portfolio-terminal.is-docking .terminal-titlebar{min-height:27px;padding:3px 12px;font-size:10px;transition:padding .4s,min-height .4s}
+.portfolio-terminal.is-docking #terminal-form,.portfolio-terminal.is-docking .terminal-feedback,.portfolio-terminal.is-docking #terminal-palette{visibility:visible;animation:terminal-arrive .68s ease both}
+@keyframes terminal-arrive{0%,55%{opacity:0}100%{opacity:1}}
+.hero{overflow:visible;padding:36px 0 54px!important}.hero:after,.hero:before{display:none!important}
 .hero-grid{background:transparent;border:0;box-shadow:none;border-radius:0;padding:0;gap:clamp(24px,5vw,65px)}
-.hero-grid>div,.hero-photo{animation:none!important}
-.hero-photo{border-radius:18px;box-shadow:none}
-.hero-note{left:20px;bottom:22px}
-.boot-window{border:0;background:transparent;box-shadow:none;max-width:680px;min-height:240px}
-.boot-chrome{background:transparent;border-bottom:1px solid #345451;padding:10px 0}
-.boot-window pre{margin:24px 0 0;min-height:110px}
-.boot-cursor{margin-left:0}
-.boot-active{overflow:hidden}
-@media(max-width:920px){.hero{padding:24px 0 42px!important}.hero-grid{padding:0}.hero-photo{margin-inline:auto}.terminal-shell{margin-top:6px}}
-@media(max-width:540px){#terminal-path{font-size:10px;max-width:35%;overflow:hidden;text-overflow:ellipsis}#terminal-form{gap:6px}#terminal-input{font-size:16px}.hero-grid{padding:0}}
+.hero-grid>div,.hero-photo{animation:none!important}.hero-photo{border-radius:18px;box-shadow:none}.hero-note{left:20px;bottom:22px}
+#command-palette{width:min(510px,calc(100% - 30px));max-height:75vh;border:1px solid #47625d;background:#151e20;color:#dce9e5;border-radius:12px;padding:16px;box-shadow:0 16px 70px #0008;font:13px/1.4 ui-monospace,SFMono-Regular,Consolas,monospace}
+#command-palette::backdrop{background:#0a1012b3;backdrop-filter:blur(3px)}
+.palette-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+#palette-dismiss{background:transparent;border:0;color:inherit;font:inherit;font-size:20px;cursor:pointer}
+#command-search{width:100%;background:#202c2c;color:#f0f6f3;border:1px solid #48635d;border-radius:6px;padding:10px;font:inherit}
+#command-results{display:grid;margin-top:8px;gap:2px;max-height:48vh;overflow:auto}
+#command-results button{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;text-align:left;background:transparent;color:#cbded7;border:0;padding:9px 7px;border-radius:5px;font:inherit;cursor:pointer}
+#command-results button:hover,#command-results button:focus-visible{background:#2a4140}
+#command-results code{color:#8bdfb1}#command-results span{font-size:11px;color:#adbfba}
+.recruiter-mode *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+@media(max-width:920px){.hero{padding:24px 0 42px!important}.hero-grid{padding:0}.hero-photo{margin-inline:auto}.terminal-dock{margin-top:6px}.terminal-titlebar{font-size:10px}}
+@media(max-width:540px){#terminal-form>.terminal-user{display:none}#terminal-path{font-size:10px;max-width:35%;overflow:hidden;text-overflow:ellipsis}#terminal-form{gap:6px}#terminal-input{font-size:16px}.terminal-titlebar{padding:3px 9px}.terminal-boot-log{font-size:15px}.boot-prompt{gap:.4em}}
+@media(prefers-reduced-motion:reduce){.terminal-preboot #portfolio-terminal{position:static;height:auto;width:auto;border-radius:10px}}
 }
 @media print{
 .cv-head-first{display:flow-root}
@@ -342,7 +369,6 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
 </style>
 </head>
 <body>
-<div class="terminal-boot" id="terminal-boot" hidden><div class="boot-window"><div class="boot-chrome"><span aria-hidden="true">● ● ●</span><span>~/portfolio</span><button type="button">Skip intro</button></div><pre aria-hidden="true"></pre><span class="boot-cursor" aria-hidden="true"></span></div></div>
 <a class="skip" href="#overview">Skip to content</a>
 <header class="topbar">
   <div class="shell topbar-inner">
@@ -362,7 +388,14 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
     </div>
   </div>
 </header>
-<div class="shell terminal-shell" id="portfolio-terminal"><form id="terminal-form" autocomplete="off"><span id="terminal-path">~/portfolio/resume</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands …"><button type="submit" aria-label="Run command">↵</button></form><div class="terminal-feedback"><span id="terminal-status" aria-hidden="true"></span><button type="button" id="terminal-close" hidden aria-label="Close output">×</button></div><pre id="terminal-output" role="status" hidden></pre></div>
+<div class="shell terminal-dock" id="terminal-dock"><section class="portfolio-terminal" id="portfolio-terminal" aria-label="Portfolio terminal">
+  <div class="terminal-titlebar"><span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="terminal-title">christoph@portfolio — zsh</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
+  <div class="terminal-boot-log" id="terminal-boot-log" hidden aria-hidden="true"><div class="terminal-welcome">Last login · portfolio</div><div class="boot-prompt"><span class="terminal-user">christoph@portfolio</span><span class="terminal-dir">~</span><span>$</span><span id="terminal-boot-command"></span><span class="terminal-caret"></span></div><div id="terminal-boot-result" hidden></div></div>
+  <form id="terminal-form" autocomplete="off"><span class="terminal-user" aria-hidden="true">christoph@portfolio</span><span id="terminal-path">~/Resumee</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands"><button type="submit" aria-label="Run command" title="Enter">↵</button></form>
+  <div class="terminal-feedback"><span class="terminal-last-prompt" aria-hidden="true">$</span><span id="terminal-status" aria-hidden="true"></span><button type="button" id="terminal-close" hidden aria-label="Close output">×</button></div>
+  <div id="terminal-output" role="status" hidden></div>
+</section></div>
+<dialog id="command-palette"><div class="palette-head"><strong id="palette-title">Commands</strong><button type="button" id="palette-dismiss" aria-label="Close">×</button></div><input id="command-search" type="search" placeholder="Search commands and sections …" aria-label="Search commands"><div id="command-results"></div></dialog>
 <main>
 <section class="panel active" id="overview">
   <div class="shell hero">
@@ -880,57 +913,98 @@ function wireCV(){
 }
 wireCV();
 function portfolioTerminal(){
- const root=document.documentElement,source=document.querySelector('#overview .hero-photo img'),brand=document.querySelector('.brandmark b');
- if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
- const form=document.getElementById('terminal-form'),input=document.getElementById('terminal-input'),status=document.getElementById('terminal-status'),output=document.getElementById('terminal-output'),clear=document.getElementById('terminal-close'),intro=document.getElementById('terminal-boot'),skip=intro.querySelector('button'),bootText=intro.querySelector('pre'),path=document.getElementById('terminal-path');
+ const root=document.documentElement,win=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock'),form=document.getElementById('terminal-form'),input=document.getElementById('terminal-input'),prompt=document.getElementById('terminal-path'),status=document.getElementById('terminal-status'),output=document.getElementById('terminal-output'),close=document.getElementById('terminal-close'),skip=document.getElementById('terminal-skip'),bootLog=document.getElementById('terminal-boot-log'),bootCommand=document.getElementById('terminal-boot-command'),bootResult=document.getElementById('terminal-boot-result'),key=document.getElementById('terminal-palette'),palette=document.getElementById('command-palette'),search=document.getElementById('command-search'),results=document.getElementById('command-results');
  const ids=['overview','motivation','professional','education','projects','creative'];
- const names={overview:'resume',motivation:'motivation',professional:'experience',education:'education',projects:'projects',creative:'creative'};
- const aliases={home:'overview',profile:'overview',resume:'overview',lebenslauf:'overview',overview:'overview',motivation:'motivation',experience:'professional',work:'professional',professional:'professional',erfahrung:'professional',education:'education',bildung:'education',projects:'projects',projekte:'projects',creative:'creative',kreatives:'creative'};
- const de=()=>root.lang==='de',reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const names={overview:'Resumee',motivation:'motivation',professional:'experience',education:'education',projects:'projects',creative:'creative'};
+ const aliases={home:'overview',profile:'overview',resume:'overview',resumee:'overview',lebenslauf:'overview',overview:'overview',motivation:'motivation',experience:'professional',work:'professional',professional:'professional',erfahrung:'professional',education:'education',bildung:'education',projects:'projects',projekte:'projects',creative:'creative',kreatives:'creative'};
+ const de=()=>root.lang==='de',t=(a,b)=>de()?a:b, reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const current=()=>ids.includes(location.hash.slice(1))?location.hash.slice(1):'overview';
- const resolve=s=>aliases[s.toLowerCase().replace(/^~\/portfolio\/?/,'').replace(/^\/+|\/+$/g,'').replace(/\/index\.html$/,'').replace(/^#/, '')]||null;
- let bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,previousFocus=null;
- function setLanguage(){input.placeholder=de()?'help für Befehle …':'type help for commands …';input.setAttribute('aria-label',de()?'Portfolio-Terminalbefehl':'Portfolio terminal command');skip.textContent=de()?'Überspringen':'Skip';clear.setAttribute('aria-label',de()?'Ausgabe schließen':'Close output');}
- function show(text){output.textContent=text;output.hidden=false;clear.hidden=false;}
- function hide(){output.hidden=true;clear.hidden=true;output.textContent='';}
- function animateCommand(command){clearInterval(typing);if(reduced()){status.textContent=command;return;}let n=0;status.textContent='';typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},22);}
- function finishBoot(){const wasRunning=bootRunning;bootTimers.forEach(clearTimeout);bootTimers=[];intro.hidden=true;root.classList.remove('boot-active');bootRunning=false;if(wasRunning&&document.activeElement===skip&&previousFocus&&previousFocus!==document.body)previousFocus.focus({preventScroll:true});}
+ const resolve=s=>aliases[s.toLowerCase().replace(/^~\/(?:portfolio\/)?/,'').replace(/^\/+|\/+$/g,'').replace(/\/index\.html$/,'').replace(/^#/,'')]||null;
+ const source=document.querySelector('#overview .hero-photo img'),brand=document.querySelector('.brandmark b');
+ if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
+ let routeId=current(),bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,motion=null,request=0,returnFocus=null;
+ function content(q){const n=document.querySelector(q);return (n?.innerText||n?.textContent||'').trim();}
+ function show(text){output.textContent=text;output.hidden=false;close.hidden=false;}
+ function hide(){request++;output.hidden=true;close.hidden=true;output.textContent='';}
+ function animateCommand(command){clearInterval(typing);status.textContent='';if(reduced()||root.classList.contains('recruiter-mode')){status.textContent=command;return;}let n=0;typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},24);}
+ function setLanguage(){input.placeholder=t('help für Befehle','type help for commands');input.setAttribute('aria-label',t('Terminalbefehl','Terminal command'));skip.textContent=t('Überspringen','Skip intro');close.setAttribute('aria-label',t('Ausgabe schließen','Close output'));key.setAttribute('aria-label',t('Befehlssuche öffnen','Open command palette'));search.placeholder=t('Befehle und Bereiche suchen …','Search commands and sections …');document.getElementById('palette-title').textContent=t('Befehle','Commands');document.getElementById('palette-dismiss').setAttribute('aria-label',t('Schließen','Close'));if(palette.open)renderPalette();}
+ function finishBoot(){const was=bootRunning;bootTimers.forEach(clearTimeout);bootTimers=[];if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}bootRunning=false;win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');skip.hidden=true;bootLog.hidden=true;form.inert=false;key.inert=false;if(was&&document.activeElement===skip&&returnFocus&&returnFocus!==document.body)returnFocus.focus({preventScroll:true});}
+ function dockBoot(){
+   if(!bootRunning)return;
+   if(reduced()||!win.animate){finishBoot();return;}
+   const target=dock.getBoundingClientRect(),from=win.getBoundingClientRect();
+   if(!target.width||!target.height){finishBoot();return;}
+   win.classList.add('is-docking');
+   motion=win.animate([{top:from.top+'px',left:from.left+'px',width:from.width+'px',height:from.height+'px',borderRadius:'0px'},{top:target.top+'px',left:target.left+'px',width:target.width+'px',height:target.height+'px',borderRadius:'10px'}],{duration:680,easing:'cubic-bezier(.65,0,.18,1)',fill:'forwards'});
+   motion.onfinish=finishBoot;
+   motion.oncancel=finishBoot;
+ }
  function boot(){
-   finishBoot();if(reduced())return;
-   previousFocus=document.activeElement;intro.hidden=false;root.classList.add('boot-active');bootRunning=true;bootText.textContent='';
-   const commands=['$ cd ~/portfolio','$ open resume/index.html',de()?'> Lebenslauf geladen.':'> Résumé loaded.'];
-   let delay=70;
-   for(const cmd of commands){for(let j=1;j<=cmd.length;j++){const d=delay+j*23;bootTimers.push(setTimeout(()=>{const previous=commands.slice(0,commands.indexOf(cmd)).join('\n');bootText.textContent=(previous?previous+'\n':'')+cmd.slice(0,j);},d));}delay+=cmd.length*23+125;}
-   bootTimers.push(setTimeout(finishBoot,delay+160));
+   finishBoot();hide();clearInterval(typing);status.textContent='cd Resumee';
+   if(reduced()||root.classList.contains('recruiter-mode'))return;
+   returnFocus=document.activeElement;bootRunning=true;root.classList.add('boot-active');win.classList.add('is-booting');skip.hidden=false;bootLog.hidden=false;form.inert=true;key.inert=true;
+   bootCommand.textContent='';bootResult.textContent='';bootResult.hidden=true;
+   const command='cd Resumee';
+   for(let i=1;i<=command.length;i++)bootTimers.push(setTimeout(()=>bootCommand.textContent=command.slice(0,i),230+i*95));
+   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},230+command.length*95+160));
+   bootTimers.push(setTimeout(dockBoot,230+command.length*95+580));
  }
- function route(id){if(!ids.includes(id))return;path.textContent='~/portfolio/'+names[id];animateCommand('$ cd '+names[id]+' && open index.html');if(id==='overview')boot();else if(bootRunning)finishBoot();}
+ function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){window.scrollTo(0,0);boot();}else{if(bootRunning)finishBoot();if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
- const commandsHelp=()=>de()?'help          Befehle anzeigen\nls            Bereiche auflisten\ncd projects   Zu Projekten wechseln\nopen resume   Lebenslauf öffnen\ncat profile   Kurzprofil lesen\nwhoami        Name und Rolle\ncontact       Kontaktinformationen\nstatus        Verfügbarkeit\npdf           Aktuellen Lebenslauf herunterladen\nclear         Ausgabe löschen':'help          List commands\nls            List sections\ncd projects   Navigate to projects\nopen resume   Open résumé\ncat profile   Read profile\nwhoami        Name and role\ncontact       Contact details\nstatus        Availability\npdf           Download current CV\nclear         Clear output';
- const content=q=>{const n=document.querySelector(q);return n?(n.innerText||n.textContent||'').trim():'';};
- function run(raw){
-   const cmd=raw.trim();if(!cmd)return;history.push(cmd);historyIndex=history.length;
-   animateCommand('$ '+cmd);
-   const [verb,...args]=cmd.split(/\s+/),arg=args.join(' '),v=verb.toLowerCase();
-   if(v==='help'||v==='?'){show(commandsHelp());return;}
-   if(v==='ls'){show(ids.map(id=>names[id]+'/').join('  '));return;}
-   if(v==='clear'){hide();return;}
-   if(v==='cd'||v==='open'){const id=resolve(arg||'resume');if(id){hide();navigate(id);}else show(de()?'Unbekannter Bereich. Nutze ls.':'Unknown section. Use ls.');return;}
-   if(v==='whoami'){show(content('#overview h1')+'\n'+content('#overview .role'));return;}
-   if(v==='cat'&&['profile','resume','about'].includes(arg.toLowerCase())){show(content('#overview .intro'));return;}
-   if(v==='status'){show(content('#overview .avail'));return;}
-   if(v==='contact'){const contact=document.querySelector('#overview a[href^="mailto:"]');show((contact?.textContent.trim()||'')+'\n'+location.origin+location.pathname);return;}
-   if(v==='pdf'){document.querySelector('header [data-pdf]').click();show(de()?'PDF-Export gestartet.':'PDF export started.');return;}
-   show(de()?'Unbekannter Befehl. Gib help ein.':'Unknown command. Type help.');
+ const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','recruiter','clear'];
+ const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
+ const choices=()=>[...ids.map(id=>({command:'cd '+names[id],label:content('.nav a[data-tab="'+id+'"]')||names[id]})),...baseCommands.map(command=>({command,label:labels()[command]}))];
+ function help(){return choices().map(x=>x.command.padEnd(23)+' '+x.label).join('\n');}
+ function recruiter(){finishBoot();const enabled=root.classList.toggle('recruiter-mode');show(enabled?t('Recruiter-Modus aktiv. Animationen deaktiviert.','Recruiter mode enabled. Animations disabled.'):t('Normaler Portfolio-Modus aktiv.','Normal portfolio mode enabled.'));}
+ async function github(){
+   const id=++request;show(t('Öffentliche GitHub-Daten werden abgerufen …','Fetching public GitHub data …'));
+   try{
+     const r=await fetch('https://api.github.com/users/FernGro/repos?sort=updated&per_page=30',{credentials:'omit',headers:{Accept:'application/vnd.github+json'}});
+     if(!r.ok)throw Error('HTTP '+r.status);
+     const data=await r.json();if(!Array.isArray(data))throw Error('response');
+     if(id!==request)return;
+     const selected=data.filter(x=>['Resumee','TIAExporter','GartenWebApp'].some(n=>n.toLowerCase()===String(x.name).toLowerCase()));
+     show(selected.length?selected.map(x=>x.name+'  |  '+(x.language||'—')+'  |  '+t('aktualisiert','updated')+' '+new Intl.DateTimeFormat(de()?'de-DE':'en-GB',{dateStyle:'medium'}).format(new Date(x.updated_at))+'\n'+x.html_url).join('\n\n'):t('Keine ausgewählten öffentlichen Projekte gefunden.','No selected public projects found.'));
+   }catch(err){if(id===request)show(t('GitHub derzeit nicht erreichbar. Öffentliche Projekte:','GitHub currently unavailable. Public projects:')+'\nhttps://github.com/FernGro');}
  }
+ function securityDemo(){
+   // Transparent deterministic example, not an LLM or real vulnerability advisory.
+   show(t('SECURITY LAB · synthetische Daten · regelbasierte Demo','SECURITY LAB · synthetic data · rule-based demo')+'\n'+t('Wähle eine Firmware-Version:','Choose a firmware version:'));
+   const controls=document.createElement('div');controls.className='terminal-demo-controls';
+   for(const version of ['1.2.0','1.4.0','2.0.0']){const b=document.createElement('button');b.type='button';b.textContent='FW '+version;b.addEventListener('click',()=>{const parts=version.split('.').map(Number),affected=parts[0]===1&&parts[1]<4;report.textContent='\n'+t('Komponente: Demo-Controller','Component: demo controller')+'\n'+t('Betroffen laut Demo-Regel: 1.x vor 1.4.0','Affected by demo rule: 1.x before 1.4.0')+'\n'+t('Asset-Version: ','Asset version: ')+version+'\n'+(affected?t('[REVIEW] Potenziell betroffen – Update und menschliche Prüfung erforderlich.','[REVIEW] Potentially affected – update and human review required.'):t('[OK] Kein Treffer für diese Demo-Regel.','[OK] No match for this demo rule.'));});controls.append(b);}
+   const report=document.createElement('span');output.append(document.createElement('br'),controls,report);
+ }
+ function run(raw){
+   const cmd=raw.trim();if(!cmd)return;history.push(cmd);historyIndex=history.length;hide();animateCommand(cmd);
+   const [verb,...args]=cmd.split(/\s+/),arg=args.join(' '),v=verb.toLowerCase();
+   if(v==='help'||v==='?'){show(help());return;}
+   if(v==='ls'){show(ids.map(id=>names[id]+'/').join('  '));return;}
+   if(v==='clear'){status.textContent='';return;}
+   if(v==='cd'||v==='open'){const id=resolve(arg||'Resumee');if(id)navigate(id);else show(t('Unbekannter Bereich. Nutze ls.','Unknown directory. Use ls.'));return;}
+   if(v==='whoami'){show(content('#overview h1')+'\n'+content('#overview .role'));return;}
+   if(v==='cat'&&['profile','resume','resumee','about'].includes(arg.toLowerCase())){show(content('#overview .intro'));return;}
+   if(v==='status'){show(content('#overview .avail'));return;}
+   if(v==='contact'){show(content('#overview a[href^="mailto:"]')+'\n'+location.origin+location.pathname);return;}
+   if(v==='pdf'){document.querySelector('header [data-pdf]').click();show(t('PDF-Export ausgelöst.','PDF export requested.'));return;}
+   if(v==='git'&&arg.toLowerCase()==='status'){github();return;}
+   if(v==='run'&&arg.toLowerCase()==='security-analysis'){securityDemo();return;}
+   if(v==='recruiter'){recruiter();return;}
+   show(t('Unbekannter Befehl. Gib help ein.','Unknown command. Type help.'));
+ }
+ function renderPalette(){const q=search.value.trim().toLowerCase();results.replaceChildren();for(const item of choices().filter(x=>(x.command+' '+x.label).toLowerCase().includes(q))){const button=document.createElement('button'),cmd=document.createElement('code'),label=document.createElement('span');button.type='button';cmd.textContent=item.command;label.textContent=item.label;button.append(cmd,label);button.addEventListener('click',()=>{palette.close();run(item.command);});results.append(button);}}
+ function openPalette(){if(bootRunning)finishBoot();if(typeof palette.showModal!=='function'){input.focus();show(help());return;}if(palette.open)return;search.value='';renderPalette();palette.showModal();search.focus();}
  form.addEventListener('submit',e=>{e.preventDefault();const cmd=input.value;input.value='';run(cmd);});
  input.addEventListener('keydown',e=>{if(e.key==='ArrowUp'&&historyIndex>0){e.preventDefault();input.value=history[--historyIndex];}else if(e.key==='ArrowDown'){e.preventDefault();historyIndex=Math.min(historyIndex+1,history.length);input.value=history[historyIndex]||'';}});
- clear.addEventListener('click',hide);skip.addEventListener('click',finishBoot);document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(bootRunning)finishBoot();else hide();}else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
- document.addEventListener('cv:navigate',e=>route(e.detail.id));
- // Mobile keeps normal anchor navigation, desktop uses the existing tab controller.
- document.addEventListener('click',e=>{if(matchMedia('(min-width: 921px)').matches)return;const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(ids.includes(id))route(id);});
- window.addEventListener('hashchange',()=>{const id=current();if(path.textContent!=='~/portfolio/'+names[id])route(id);});
+ skip.addEventListener('click',finishBoot);close.addEventListener('click',hide);key.addEventListener('click',openPalette);search.addEventListener('input',renderPalette);search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();results.querySelector('button')?.click();}else if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('button')?.focus();}});document.getElementById('palette-dismiss').addEventListener('click',()=>palette.close());
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}else if(e.key==='Escape'&&bootRunning)finishBoot();else if(e.key==='Escape'&&!palette.open)hide();else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
+ document.addEventListener('cv:navigate',e=>route(e.detail.id,{replay:true}));
+ document.addEventListener('click',e=>{if(matchMedia('(min-width: 921px)').matches)return;const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(ids.includes(id))route(id,{replay:true});});
+ window.addEventListener('hashchange',()=>{if(routeId!==current())route(current());});
+ window.addEventListener('resize',()=>{if(motion)finishBoot();});
+ window.addEventListener('pageshow',e=>{if(e.persisted&&current()==='overview')boot();});
  new MutationObserver(setLanguage).observe(root,{attributes:true,attributeFilter:['lang']});
- setLanguage();route(current());
+ if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
+ setLanguage();route(current(),{replay:true});root.classList.remove('terminal-preboot');
 }
 portfolioTerminal();
 </script>

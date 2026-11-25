@@ -331,7 +331,7 @@ html{scroll-padding-top:175px}
 .terminal-preboot,.boot-active{overflow:hidden;scroll-behavior:auto}
 .terminal-preboot .terminal-dock,.boot-active .terminal-dock{z-index:2000}
 .terminal-preboot #terminal-palette{visibility:hidden}
-.terminal-preboot #portfolio-terminal,.portfolio-terminal.is-booting{position:fixed;inset:0;z-index:2000;width:100%;height:100%;height:100dvh;border:0;border-radius:0;box-shadow:none;background:#0b1113}
+.terminal-preboot #portfolio-terminal,.portfolio-terminal.is-booting{position:fixed;inset:0;z-index:2147483000;width:100%;height:100%;height:100dvh;border:0;border-radius:0;box-shadow:none;background:#0b1113}
 .terminal-preboot #terminal-form,.terminal-preboot .terminal-feedback,.portfolio-terminal.is-booting #terminal-form,.portfolio-terminal.is-booting .terminal-feedback,.portfolio-terminal.is-booting #terminal-palette,.portfolio-terminal.is-booting #terminal-output{visibility:hidden}
 .portfolio-terminal.is-booting .terminal-titlebar{min-height:42px;padding:8px 20px;font-size:12px}
 .terminal-boot-log{position:absolute;top:clamp(76px,26vh,260px);left:clamp(22px,10vw,150px);right:clamp(16px,8vw,110px);font-size:clamp(15px,2.4vw,25px);line-height:1.85}
@@ -368,6 +368,27 @@ html{scroll-padding-top:175px}
 .cv-head-first .cv-profile{clear:both}
 .cv-section h2{background:transparent;border:0;border-bottom:1px solid #bdd0c9;padding:5px 0}
 }
+
+/* V6: actual macOS-style window controls and top-level fullscreen. */
+@media screen{
+.terminal-titlebar .terminal-lights{gap:7px}
+.terminal-titlebar .terminal-lights button{display:grid;place-items:center;width:13px;height:13px;padding:0;border-radius:50%;border:0;color:transparent;font:bold 12px/1 system-ui,sans-serif;cursor:pointer}
+.terminal-titlebar .terminal-lights button:hover,.terminal-titlebar .terminal-lights button:focus-visible{color:#24302b}
+.terminal-titlebar #mac-close{background:#ed6a5e}
+.terminal-titlebar #mac-minimize{background:#f4bf4f}
+.terminal-titlebar #mac-zoom{background:#61c454}
+.portfolio-terminal.is-booting .terminal-titlebar .terminal-lights button{width:14px;height:14px}
+.terminal-dock.is-compact{min-height:0}
+.portfolio-terminal.is-minimized #terminal-form,.portfolio-terminal.is-minimized .terminal-feedback,.portfolio-terminal.is-minimized #terminal-output{display:none!important}
+.portfolio-terminal.is-maximized{position:fixed;inset:0;z-index:2147483000;width:100%;height:100%;height:100dvh;border:0;border-radius:0}
+.terminal-maximized{overflow:hidden}
+.portfolio-terminal.is-maximized #terminal-output{max-height:calc(100dvh - 100px)}
+#terminal-reopen{display:inline-flex;gap:8px;align-items:center;background:#202b2d;color:#d9e6e2;border:1px solid #354849;border-radius:7px;padding:7px 12px;cursor:pointer;font:12px ui-monospace,SFMono-Regular,Consolas,monospace}
+#terminal-reopen span{color:#83dcae;font-weight:700}
+.portfolio-terminal.is-booting{background:#0b1113;position:fixed;inset:0;z-index:2147483000}
+.portfolio-terminal.is-docking{right:auto;bottom:auto}
+@media(pointer:coarse){.terminal-titlebar .terminal-lights button{width:21px;height:21px;color:#24302b;font-size:13px}}
+}
 </style>
 </head>
 <body>
@@ -391,12 +412,12 @@ html{scroll-padding-top:175px}
   </div>
 </header>
 <div class="shell terminal-dock" id="terminal-dock"><section class="portfolio-terminal" id="portfolio-terminal" aria-label="Portfolio terminal">
-  <div class="terminal-titlebar"><span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="terminal-title">christoph@portfolio — zsh</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
+  <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
   <div class="terminal-boot-log" id="terminal-boot-log" hidden aria-hidden="true"><div class="terminal-welcome">Last login · portfolio</div><div class="boot-prompt"><span class="terminal-user">christoph@portfolio</span><span class="terminal-dir">~</span><span>$</span><span id="terminal-boot-command"></span><span class="terminal-caret"></span></div><div id="terminal-boot-result" hidden></div></div>
   <form id="terminal-form" autocomplete="off"><span class="terminal-user" aria-hidden="true">christoph@portfolio</span><span id="terminal-path">~/Resumee</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands"><button type="submit" aria-label="Run command" title="Enter">↵</button></form>
   <div class="terminal-feedback"><span class="terminal-last-prompt" aria-hidden="true">$</span><span id="terminal-status" aria-hidden="true"></span><button type="button" id="terminal-close" hidden aria-label="Close output">×</button></div>
   <div id="terminal-output" role="status" hidden></div>
-</section></div>
+</section><button type="button" id="terminal-reopen" hidden><span aria-hidden="true">&gt;_</span> Terminal</button></div>
 <dialog id="command-palette"><div class="palette-head"><strong id="palette-title">Commands</strong><button type="button" id="palette-dismiss" aria-label="Close">×</button></div><input id="command-search" type="search" placeholder="Search commands and sections …" aria-label="Search commands"><div id="command-results"></div></dialog>
 <main>
 <section class="panel active" id="overview">
@@ -924,37 +945,59 @@ function portfolioTerminal(){
  const resolve=s=>aliases[s.toLowerCase().replace(/^~\/(?:portfolio\/)?/,'').replace(/^\/+|\/+$/g,'').replace(/\/index\.html$/,'').replace(/^#/,'')]||null;
  const source=document.querySelector('#overview .hero-photo img'),brand=document.querySelector('.brandmark b');
  if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
- let routeId=current(),bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,motion=null,request=0,returnFocus=null;
+ let routeId=current(),bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,motion=null,request=0,returnFocus=null,windowMode="normal";
+ const macClose=document.getElementById("mac-close"),macMin=document.getElementById("mac-minimize"),macZoom=document.getElementById("mac-zoom"),reopen=document.getElementById("terminal-reopen");
  function content(q){const n=document.querySelector(q);return (n?.innerText||n?.textContent||'').trim();}
  function show(text){output.textContent=text;output.hidden=false;close.hidden=false;}
  function hide(){request++;output.hidden=true;close.hidden=true;output.textContent='';}
  function animateCommand(command){clearInterval(typing);status.textContent='';if(reduced()||root.classList.contains('recruiter-mode')){status.textContent=command;return;}let n=0;typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},24);}
- function setLanguage(){input.placeholder=t('help für Befehle','type help for commands');input.setAttribute('aria-label',t('Terminalbefehl','Terminal command'));skip.textContent=t('Überspringen','Skip intro');close.setAttribute('aria-label',t('Ausgabe schließen','Close output'));key.setAttribute('aria-label',t('Befehlssuche öffnen','Open command palette'));search.placeholder=t('Befehle und Bereiche suchen …','Search commands and sections …');document.getElementById('palette-title').textContent=t('Befehle','Commands');document.getElementById('palette-dismiss').setAttribute('aria-label',t('Schließen','Close'));if(palette.open)renderPalette();}
- function finishBoot(){const was=bootRunning;bootTimers.forEach(clearTimeout);bootTimers=[];if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}bootRunning=false;win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');skip.hidden=true;bootLog.hidden=true;form.inert=false;key.inert=false;if(was&&document.activeElement===skip&&returnFocus&&returnFocus!==document.body)returnFocus.focus({preventScroll:true});}
+ function setLanguage(){for(const [button,label] of [[macClose,t('Terminal schließen','Close terminal')],[macMin,t('Terminal minimieren','Minimize terminal')],[macZoom,t('Terminal vergrößern / wiederherstellen','Maximize / restore terminal')],[reopen,t('Terminal öffnen','Open terminal')]]){button.title=label;button.setAttribute('aria-label',label);}input.placeholder=t('help für Befehle','type help for commands');input.setAttribute('aria-label',t('Terminalbefehl','Terminal command'));skip.textContent=t('Überspringen','Skip intro');close.setAttribute('aria-label',t('Ausgabe schließen','Close output'));key.setAttribute('aria-label',t('Befehlssuche öffnen','Open command palette'));search.placeholder=t('Befehle und Bereiche suchen …','Search commands and sections …');document.getElementById('palette-title').textContent=t('Befehle','Commands');document.getElementById('palette-dismiss').setAttribute('aria-label',t('Schließen','Close'));if(palette.open)renderPalette();}
+ function finishBoot(){
+   const was=bootRunning;bootRunning=false;bootTimers.forEach(clearTimeout);bootTimers=[];
+   if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}
+   win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');
+   win.style.removeProperty('top');win.style.removeProperty('left');win.style.removeProperty('width');win.style.removeProperty('height');
+   if(win.parentNode!==dock)dock.insertBefore(win,reopen);
+   skip.hidden=true;bootLog.hidden=true;form.inert=false;key.inert=false;
+   if(was&&document.activeElement===skip&&returnFocus&&returnFocus!==document.body)returnFocus.focus({preventScroll:true});
+ }
+ function setWindow(mode){
+   if(bootRunning)finishBoot();
+   windowMode=mode;win.classList.toggle('is-minimized',mode==='minimized');win.classList.toggle('is-maximized',mode==='maximized');
+   dock.classList.toggle('is-compact',mode==='minimized'||mode==='closed');
+   win.hidden=mode==='closed';reopen.hidden=mode!=='closed';
+   form.inert=mode==='minimized'||mode==='closed';
+   macMin.setAttribute('aria-pressed',String(mode==='minimized'));macZoom.setAttribute('aria-pressed',String(mode==='maximized'));
+   if(mode==='maximized'){document.body.appendChild(win);root.classList.add('terminal-maximized');input.focus({preventScroll:true});}
+   else{if(win.parentNode!==dock)dock.insertBefore(win,reopen);root.classList.remove('terminal-maximized');}
+ }
  function dockBoot(){
    if(!bootRunning)return;
-   if(reduced()||!win.animate){finishBoot();return;}
    const target=dock.getBoundingClientRect(),from=win.getBoundingClientRect();
-   if(!target.width||!target.height){finishBoot();return;}
+   if(!target.width||!target.height||typeof win.animate!=='function'){finishBoot();return;}
    win.classList.add('is-docking');
-   motion=win.animate([{top:from.top+'px',left:from.left+'px',width:from.width+'px',height:from.height+'px',borderRadius:'0px'},{top:target.top+'px',left:target.left+'px',width:target.width+'px',height:target.height+'px',borderRadius:'10px'}],{duration:680,easing:'cubic-bezier(.65,0,.18,1)',fill:'forwards'});
-   motion.onfinish=finishBoot;
-   motion.oncancel=finishBoot;
+   try{
+     motion=win.animate([{top:from.top+'px',left:from.left+'px',width:from.width+'px',height:from.height+'px',borderRadius:'0px'},{top:target.top+'px',left:target.left+'px',width:target.width+'px',height:target.height+'px',borderRadius:'10px'}],{duration:680,easing:'cubic-bezier(.65,0,.18,1)',fill:'forwards'});
+     motion.onfinish=finishBoot;motion.oncancel=finishBoot;
+     bootTimers.push(setTimeout(finishBoot,850));
+   }catch(error){finishBoot();}
  }
- function boot(){
-   finishBoot();hide();clearInterval(typing);status.textContent='cd Resumee';
-   if(reduced()||root.classList.contains('recruiter-mode'))return;
+ function boot({force=false}={}){
+   finishBoot();setWindow('normal');hide();clearInterval(typing);status.textContent='cd Resumee';
+   if(!force&&(reduced()||root.classList.contains('recruiter-mode')))return;
    returnFocus=document.activeElement;bootRunning=true;root.classList.add('boot-active');win.classList.add('is-booting');skip.hidden=false;bootLog.hidden=false;form.inert=true;key.inert=true;
+   document.body.appendChild(win);
    bootCommand.textContent='';bootResult.textContent='';bootResult.hidden=true;
    const command='cd Resumee';
-   for(let i=1;i<=command.length;i++)bootTimers.push(setTimeout(()=>bootCommand.textContent=command.slice(0,i),230+i*95));
-   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},230+command.length*95+160));
-   bootTimers.push(setTimeout(dockBoot,230+command.length*95+580));
+   const interval=reduced()?0:95;
+   for(let i=1;i<=command.length;i++)bootTimers.push(setTimeout(()=>bootCommand.textContent=command.slice(0,i),230+i*interval));
+   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},230+command.length*interval+160));
+   bootTimers.push(setTimeout(()=>{if(reduced())finishBoot();else dockBoot();},230+command.length*interval+580));
  }
- function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){window.scrollTo({top:0,left:0,behavior:'instant'});boot();}else{if(bootRunning)finishBoot();if(changed||replay)animateCommand('cd '+names[id]);}}
+ function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){boot();try{window.scrollTo(0,0);}catch(error){}}else{if(bootRunning)finishBoot();if(windowMode==='maximized')setWindow('normal');if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
- const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','recruiter','clear'];
- const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
+ const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','intro','recruiter','clear'];
+ const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),intro:t('Startanimation erneut abspielen','Replay startup animation'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
  const choices=()=>[...ids.map(id=>({command:'cd '+names[id],label:content('.nav a[data-tab="'+id+'"]')||names[id]})),...baseCommands.map(command=>({command,label:labels()[command]}))];
  function help(){return choices().map(x=>x.command.padEnd(23)+' '+x.label).join('\n');}
  function recruiter(){finishBoot();const enabled=root.classList.toggle('recruiter-mode');show(enabled?t('Recruiter-Modus aktiv. Animationen deaktiviert.','Recruiter mode enabled. Animations disabled.'):t('Normaler Portfolio-Modus aktiv.','Normal portfolio mode enabled.'));}
@@ -990,15 +1033,17 @@ function portfolioTerminal(){
    if(v==='git'&&arg.toLowerCase()==='status'){github();return;}
    if(v==='run'&&arg.toLowerCase()==='security-analysis'){securityDemo();return;}
    if(v==='timeline'){const rows=[...document.querySelectorAll('#professional .entry,#education .edu')].map(n=>[n.querySelector('.date,.year')?.textContent.trim(),n.querySelector('h3')?.textContent.trim()].filter(Boolean).join('  |  '));show(rows.join('\n'));return;}
+   if(v==='intro'){boot({force:true});return;}
    if(v==='recruiter'){recruiter();return;}
    show(t('Unbekannter Befehl. Gib help ein.','Unknown command. Type help.'));
  }
  function renderPalette(){const q=search.value.trim().toLowerCase();results.replaceChildren();for(const item of choices().filter(x=>(x.command+' '+x.label).toLowerCase().includes(q))){const button=document.createElement('button'),cmd=document.createElement('code'),label=document.createElement('span');button.type='button';cmd.textContent=item.command;label.textContent=item.label;button.append(cmd,label);button.addEventListener('click',()=>{palette.close();run(item.command);});results.append(button);}}
- function openPalette(){if(bootRunning)finishBoot();if(typeof palette.showModal!=='function'){input.focus();show(help());return;}if(palette.open)return;search.value='';renderPalette();palette.showModal();search.focus();}
+ function openPalette(){if(bootRunning)finishBoot();if(windowMode==='closed'||windowMode==='minimized')setWindow('normal');if(typeof palette.showModal!=='function'){input.focus();show(help());return;}if(palette.open)return;search.value='';renderPalette();palette.showModal();search.focus();}
  form.addEventListener('submit',e=>{e.preventDefault();const cmd=input.value;input.value='';run(cmd);});
  input.addEventListener('keydown',e=>{if(e.key==='ArrowUp'&&historyIndex>0){e.preventDefault();input.value=history[--historyIndex];}else if(e.key==='ArrowDown'){e.preventDefault();historyIndex=Math.min(historyIndex+1,history.length);input.value=history[historyIndex]||'';}});
+ macClose.addEventListener('click',()=>{setWindow('closed');reopen.focus();});macMin.addEventListener('click',()=>setWindow(windowMode==='minimized'?'normal':'minimized'));macZoom.addEventListener('click',()=>setWindow(windowMode==='maximized'?'normal':'maximized'));reopen.addEventListener('click',()=>{setWindow('normal');input.focus();});
  skip.addEventListener('click',finishBoot);close.addEventListener('click',hide);key.addEventListener('click',openPalette);search.addEventListener('input',renderPalette);search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();results.querySelector('button')?.click();}else if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('button')?.focus();}});document.getElementById('palette-dismiss').addEventListener('click',()=>palette.close());
- document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}else if(e.key==='Escape'&&bootRunning)finishBoot();else if(e.key==='Escape'&&!palette.open)hide();else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}else if(e.key==='Escape'&&bootRunning)finishBoot();else if(e.key==='Escape'&&windowMode==='maximized'&&!palette.open)setWindow('normal');else if(e.key==='Escape'&&!palette.open)hide();else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
  document.addEventListener('cv:navigate',e=>route(e.detail.id,{replay:true}));
  document.addEventListener('click',e=>{if(matchMedia('(min-width: 921px)').matches)return;const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(ids.includes(id))route(id,{replay:true});});
  window.addEventListener('hashchange',()=>{if(routeId!==current())route(current());});
@@ -1006,7 +1051,7 @@ function portfolioTerminal(){
  window.addEventListener('pageshow',e=>{if(e.persisted&&current()==='overview')boot();});
  new MutationObserver(setLanguage).observe(root,{attributes:true,attributeFilter:['lang']});
  if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
- setLanguage();route(current(),{replay:true});root.classList.remove('terminal-preboot');
+ setLanguage();const initial=current();prompt.textContent='~/'+names[initial];if(initial==='overview')boot({force:new URLSearchParams(location.search).get('intro')==='1'});else animateCommand('cd '+names[initial]);root.classList.remove('terminal-preboot');
 }
 try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active');document.getElementById('portfolio-terminal')?.classList.remove('is-booting','is-docking');}
 </script>

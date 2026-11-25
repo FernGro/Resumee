@@ -6,14 +6,14 @@ Bilingual, responsive CV website (DE / EN), hosted on GitHub Pages. All images a
 
 https://ferngro.github.io/Resumee/
 
-Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. Intro motion respects reduced-motion preferences.
+Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. The terminal boot animation is shown once per session, lasts about 1.5 seconds, can be skipped (including Escape), and is suppressed for reduced motion or direct section links. The monitor frame and avatar use the original embedded outdoor portrait.
 
 ## CV and PDF export
 
 - PDF buttons generate a searchable, text-based A4 PDF in the browser when clicked. No embedded snapshots or server-side PDF service.
 - The print action uses a dedicated HTML print layout populated from the same current content.
 - Export reads the currently selected language directly from the website DOM: experience, education, skills, projects, motivation, creative experience, contact and languages.
-- Additional entries in the existing sections are automatically included; pagination adds pages rather than reducing font size. Photos and gallery images are intentionally omitted from the application PDF.
+- Additional entries in the existing sections are automatically included; pagination adds pages rather than reducing font size. The first PDF page has a monitor-inspired header with the outdoor portrait, and the body uses numbered section headers and a timeline rail. The portrait is converted locally to JPEG and embedded into the searchable PDF; the gallery is intentionally omitted. The browser print fallback also includes the portrait.
 - Date and earliest availability are evaluated in Europe/Berlin. Availability uses the current month plus five months, on the first day (one application lead month plus three full notice months after that lead month; e.g. November 2026 → April 1, 2027). Review this policy if notice terms change.
 - The PDF date is the generation date, not a claim that the biographical content was reviewed on that date.
 
@@ -27,4 +27,4 @@ The previous static PDF build workflow is obsolete. `tools/build_pdfs.py` now ex
 
 ## Verification
 
-Runtime date boundary cases and simulated lossless pagination were checked when implementing the generator; PDF object/xref offsets and two-page structure were checked on the initial generator. Live browser rendering, accessibility, Safari/iOS downloads and visual print layout need separate regression testing.
+Runtime date boundary cases and simulated lossless pagination were checked when implementing the generator. The terminal redesign was checked with the actual PDF drawing function, representative German text, cross-reference offsets, and synthetic image-resource wiring. Live browser rendering, actual portrait conversion, Safari/iOS downloads, and visual print layout still need regression testing.

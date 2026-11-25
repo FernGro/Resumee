@@ -389,6 +389,17 @@ html{scroll-padding-top:175px}
 .portfolio-terminal.is-docking{right:auto;bottom:auto}
 @media(pointer:coarse){.terminal-titlebar .terminal-lights button{width:21px;height:21px;color:#24302b;font-size:13px}}
 }
+
+/* Mobile Safari: one fixed navigation bar; terminal stays in the page flow. */
+@media screen and (max-width:920px){
+  html{scroll-padding-top:78px}
+  .section,.hero{scroll-margin-top:0}
+  .terminal-dock{position:relative;top:auto;z-index:auto;min-height:0}
+  .terminal-preboot .terminal-dock,.boot-active .terminal-dock{z-index:2000}
+  .mobile-nav{position:fixed;top:auto;bottom:max(10px,env(safe-area-inset-bottom));left:12px;right:12px;transform:translate3d(0,var(--mobile-nav-shift,0px),0);margin:0;z-index:60;overscroll-behavior-x:contain}
+  .mobile-nav.keyboard-hidden,.boot-active .mobile-nav,.terminal-maximized .mobile-nav,.terminal-preboot .mobile-nav{visibility:hidden;pointer-events:none}
+  footer{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+}
 </style>
 </head>
 <body>
@@ -1056,6 +1067,34 @@ function portfolioTerminal(){
  setLanguage();const initial=current();prompt.textContent='~/'+names[initial];if(initial==='overview')boot({force:new URLSearchParams(location.search).get('intro')==='1'});else animateCommand('cd '+names[initial]);root.classList.remove('terminal-preboot');
 }
 try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active','terminal-maximized');const terminal=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock');if(terminal&&dock){terminal.classList.remove('is-booting','is-docking','is-maximized');if(terminal.parentNode!==dock)dock.prepend(terminal);}}
+</script>
+<script>
+function mobileViewportNav(){
+ const nav=document.getElementById('mobileNav'),mq=matchMedia('(max-width: 920px)'),vv=window.visualViewport;
+ if(!nav)return;
+ let shift=0,frame=0;
+ function update(){
+   frame=0;
+   if(!mq.matches){shift=0;nav.style.removeProperty('--mobile-nav-shift');nav.classList.remove('keyboard-hidden');return;}
+   const active=document.activeElement,editing=active&&(/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)||active.isContentEditable);
+   const keyboard=Boolean(editing&&vv&&window.innerHeight-vv.height>110);
+   nav.classList.toggle('keyboard-hidden',keyboard);
+   if(keyboard)return;
+   if(!vv||Math.abs(vv.scale-1)>.05){shift=0;nav.style.removeProperty('--mobile-nav-shift');return;}
+   const gap=parseFloat(getComputedStyle(nav).bottom)||10;
+   const base=nav.getBoundingClientRect().bottom-shift;
+   const desired=vv.offsetTop+vv.height-gap;
+   const next=Math.round(desired-base);
+   if(Number.isFinite(next)&&Math.abs(next-shift)>1){shift=next;nav.style.setProperty('--mobile-nav-shift',shift+'px');}
+ }
+ function schedule(){if(!frame)frame=requestAnimationFrame(update);}
+ window.addEventListener('resize',schedule,{passive:true});window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('orientationchange',schedule,{passive:true});window.addEventListener('pageshow',schedule);
+ if(vv){vv.addEventListener('resize',schedule,{passive:true});vv.addEventListener('scroll',schedule,{passive:true});}
+ document.addEventListener('focusin',schedule);document.addEventListener('focusout',schedule);
+ new MutationObserver(schedule).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
+ schedule();
+}
+mobileViewportNav();
 </script>
 </body>
 </html>

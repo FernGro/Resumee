@@ -535,7 +535,7 @@ html,body{margin:0!important;padding:0!important;background:#fff!important;color
       if (a.hasAttribute("role")) { a.setAttribute("aria-selected", on ? "true" : "false"); a.tabIndex = on ? 0 : -1; }
     });
     if (updateHash !== false) {
-      try { history.replaceState(null, "", "#" + target.id); } catch (e) { location.hash = target.id; }
+      try { if (location.hash !== "#" + target.id) history.pushState(null, "", "#" + target.id); } catch (e) { location.hash = target.id; }
     }
     if (updateHash !== false) document.dispatchEvent(new CustomEvent("cv:navigate", {detail:{id:target.id}}));
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -889,15 +889,15 @@ function portfolioTerminal(){
  const de=()=>root.lang==='de',reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
  const current=()=>ids.includes(location.hash.slice(1))?location.hash.slice(1):'overview';
  const resolve=s=>aliases[s.toLowerCase().replace(/^~\/portfolio\/?/,'').replace(/^\/+|\/+$/g,'').replace(/\/index\.html$/,'').replace(/^#/, '')]||null;
- let bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false;
+ let bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,previousFocus=null;
  function setLanguage(){input.placeholder=de()?'help für Befehle …':'type help for commands …';input.setAttribute('aria-label',de()?'Portfolio-Terminalbefehl':'Portfolio terminal command');skip.textContent=de()?'Überspringen':'Skip';clear.setAttribute('aria-label',de()?'Ausgabe schließen':'Close output');}
  function show(text){output.textContent=text;output.hidden=false;clear.hidden=false;}
  function hide(){output.hidden=true;clear.hidden=true;output.textContent='';}
  function animateCommand(command){clearInterval(typing);if(reduced()){status.textContent=command;return;}let n=0;status.textContent='';typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},22);}
- function finishBoot(){bootTimers.forEach(clearTimeout);bootTimers=[];intro.hidden=true;root.classList.remove('boot-active');bootRunning=false;}
+ function finishBoot(){const wasRunning=bootRunning;bootTimers.forEach(clearTimeout);bootTimers=[];intro.hidden=true;root.classList.remove('boot-active');bootRunning=false;if(wasRunning&&document.activeElement===skip&&previousFocus&&previousFocus!==document.body)previousFocus.focus({preventScroll:true});}
  function boot(){
    finishBoot();if(reduced())return;
-   intro.hidden=false;root.classList.add('boot-active');bootRunning=true;bootText.textContent='';
+   previousFocus=document.activeElement;intro.hidden=false;root.classList.add('boot-active');bootRunning=true;bootText.textContent='';
    const commands=['$ cd ~/portfolio','$ open resume/index.html',de()?'> Lebenslauf geladen.':'> Résumé loaded.'];
    let delay=70;
    for(const cmd of commands){for(let j=1;j<=cmd.length;j++){const d=delay+j*23;bootTimers.push(setTimeout(()=>{const previous=commands.slice(0,commands.indexOf(cmd)).join('\n');bootText.textContent=(previous?previous+'\n':'')+cmd.slice(0,j);},d));}delay+=cmd.length*23+125;}
@@ -906,7 +906,7 @@ function portfolioTerminal(){
  function route(id){if(!ids.includes(id))return;path.textContent='~/portfolio/'+names[id];animateCommand('$ cd '+names[id]+' && open index.html');if(id==='overview')boot();else if(bootRunning)finishBoot();}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
  const commandsHelp=()=>de()?'help          Befehle anzeigen\nls            Bereiche auflisten\ncd projects   Zu Projekten wechseln\nopen resume   Lebenslauf öffnen\ncat profile   Kurzprofil lesen\nwhoami        Name und Rolle\ncontact       Kontaktinformationen\nstatus        Verfügbarkeit\npdf           Aktuellen Lebenslauf herunterladen\nclear         Ausgabe löschen':'help          List commands\nls            List sections\ncd projects   Navigate to projects\nopen resume   Open résumé\ncat profile   Read profile\nwhoami        Name and role\ncontact       Contact details\nstatus        Availability\npdf           Download current CV\nclear         Clear output';
- const content=q=>document.querySelector(q)?.innerText.trim()||'';
+ const content=q=>{const n=document.querySelector(q);return n?(n.innerText||n.textContent||'').trim():'';};
  function run(raw){
    const cmd=raw.trim();if(!cmd)return;history.push(cmd);historyIndex=history.length;
    animateCommand('$ '+cmd);
@@ -924,7 +924,7 @@ function portfolioTerminal(){
  }
  form.addEventListener('submit',e=>{e.preventDefault();const cmd=input.value;input.value='';run(cmd);});
  input.addEventListener('keydown',e=>{if(e.key==='ArrowUp'&&historyIndex>0){e.preventDefault();input.value=history[--historyIndex];}else if(e.key==='ArrowDown'){e.preventDefault();historyIndex=Math.min(historyIndex+1,history.length);input.value=history[historyIndex]||'';}});
- clear.addEventListener('click',hide);skip.addEventListener('click',finishBoot);document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(bootRunning)finishBoot();else hide();}});
+ clear.addEventListener('click',hide);skip.addEventListener('click',finishBoot);document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(bootRunning)finishBoot();else hide();}else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
  document.addEventListener('cv:navigate',e=>route(e.detail.id));
  // Mobile keeps normal anchor navigation, desktop uses the existing tab controller.
  document.addEventListener('click',e=>{if(matchMedia('(min-width: 921px)').matches)return;const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(ids.includes(id))route(id);});

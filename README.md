@@ -1,28 +1,30 @@
 # Christoph Grossklaus — CV & Portfolio
 
-Bilingual, responsive CV website (DE / EN). The self-contained `index.html` includes all photos and both PDF downloads. No external runtime libraries or build step required. The separate print action generates the CV from the currently displayed language.
+Bilingual, responsive CV website (DE / EN), hosted on GitHub Pages. All images are embedded; no runtime dependency or build step.
 
-## GitHub Pages
+## Live site
 
-1. Open **Settings → General**. A public repository supports GitHub Pages with GitHub Free; private repository support depends on the GitHub plan.
-2. Open **Settings → Pages**.
-3. Select **Deploy from a branch**, branch `main`, folder `/ (root)`, then **Save**.
-4. After the Pages deployment succeeds, open https://ferngro.github.io/Resumee/.
+https://ferngro.github.io/Resumee/
 
-The repository contains a personal portfolio. The public version intentionally contains email and LinkedIn but no phone number. Review all personal and professional information before making it public.
+Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. Intro motion respects reduced-motion preferences.
 
-## Updating content and PDF downloads
+## CV and PDF export
 
-The English HTML and German translations are in `index.html`. Update both when changing CV data. To regenerate both PDF downloads from the current site:
+- PDF buttons generate a searchable, text-based A4 PDF in the browser when clicked. No embedded snapshots or server-side PDF service.
+- The print action uses a dedicated HTML print layout populated from the same current content.
+- Export reads the currently selected language directly from the website DOM: experience, education, skills, projects, motivation, creative experience, contact and languages.
+- Additional entries in the existing sections are automatically included; pagination adds pages rather than reducing font size. Photos and gallery images are intentionally omitted from the application PDF.
+- Date and earliest availability are evaluated in Europe/Berlin. Availability uses the current month plus five months, on the first day (one application lead month plus three full notice months after that lead month; e.g. November 2026 → April 1, 2027). Review this policy if notice terms change.
+- The PDF date is the generation date, not a claim that the biographical content was reviewed on that date.
 
-```bash
-python -m pip install playwright
-python -m playwright install chromium
-python tools/build_pdfs.py
-```
+## Updating content
 
-Commit the updated `index.html`. The generator also creates two standalone PDFs locally. The PDFs are snapshots; the Print / PDF control renders the current website directly.
+Edit the English HTML in `index.html` and its corresponding German entries in the translation groups. For added records, keep translation arrays in the same order as the matched elements. Missing translations fall back to English and log a warning. The export automatically reads the updated text; no manual PDF rebuild is required.
+
+When adding an entirely new panel, use a section with a heading and article/card elements with h3 and p/li content. Review its exported layout.
+
+The previous static PDF build workflow is obsolete. `tools/build_pdfs.py` now exports both live print layouts locally for testing, without changing the HTML.
 
 ## Verification
 
-Local Chromium / Playwright checks: desktop and mobile navigation, keyboard tab navigation, German/English toggle, light/dark theme, image loading and gallery navigation, responsive widths (320, 390, 768, 921, 1024, 1151, 1440 px), both actual PDF downloads compared byte-for-byte against the generated files, and three-page print output in both languages. Native Safari/iOS and the actual public Pages URL require separate verification after activation. The PDF build script was run successfully on a temporary copy.
+Runtime date boundary cases and simulated lossless pagination were checked when implementing the generator; PDF object/xref offsets and two-page structure were checked on the initial generator. Live browser rendering, accessibility, Safari/iOS downloads and visual print layout need separate regression testing.

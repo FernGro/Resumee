@@ -11,7 +11,7 @@
 <meta property="og:title" content="Christoph Grossklaus — CV &amp; Portfolio">
 <meta property="og:description" content="Software Engineer | AI Automation &amp; Cybersecurity">
 <title>Christoph Grossklaus — CV &amp; Portfolio</title>
-<script>document.documentElement.classList.add("js");try{if((!location.hash||location.hash==="#overview")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&new URLSearchParams(location.search).get("view")!=="recruiter")document.documentElement.classList.add("terminal-preboot");}catch(e){}</script>
+<script>document.documentElement.classList.add("js");try{if((!location.hash||location.hash==="#overview")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&new URLSearchParams(location.search).get("view")!=="recruiter")document.documentElement.classList.add("terminal-preboot");setTimeout(()=>document.documentElement.classList.remove("terminal-preboot"),5000);}catch(e){}</script>
 <style>
 /* ---------- tokens ---------- */
 :root{
@@ -328,7 +328,9 @@ html{scroll-padding-top:175px}
 #terminal-status{flex:1;min-width:0}
 #terminal-output{margin:0;padding:8px 12px 12px;border-top:1px solid #344645;white-space:pre-wrap;overflow-wrap:anywhere;max-height:min(320px,40vh);overflow:auto;color:#cbded7}
 .terminal-demo-controls{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.terminal-demo-controls button{font:inherit;background:#233a36;border:1px solid #527a6d;color:#d9f4e7;padding:5px 8px;border-radius:4px;cursor:pointer}
-.terminal-preboot,.boot-active{overflow:hidden}
+.terminal-preboot,.boot-active{overflow:hidden;scroll-behavior:auto}
+.terminal-preboot .terminal-dock,.boot-active .terminal-dock{z-index:2000}
+.terminal-preboot #terminal-palette{visibility:hidden}
 .terminal-preboot #portfolio-terminal,.portfolio-terminal.is-booting{position:fixed;inset:0;z-index:2000;width:100%;height:100%;height:100dvh;border:0;border-radius:0;box-shadow:none;background:#0b1113}
 .terminal-preboot #terminal-form,.terminal-preboot .terminal-feedback,.portfolio-terminal.is-booting #terminal-form,.portfolio-terminal.is-booting .terminal-feedback,.portfolio-terminal.is-booting #terminal-palette,.portfolio-terminal.is-booting #terminal-output{visibility:hidden}
 .portfolio-terminal.is-booting .terminal-titlebar{min-height:42px;padding:8px 20px;font-size:12px}
@@ -949,21 +951,20 @@ function portfolioTerminal(){
    bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},230+command.length*95+160));
    bootTimers.push(setTimeout(dockBoot,230+command.length*95+580));
  }
- function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){window.scrollTo(0,0);boot();}else{if(bootRunning)finishBoot();if(changed||replay)animateCommand('cd '+names[id]);}}
+ function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){window.scrollTo({top:0,left:0,behavior:'instant'});boot();}else{if(bootRunning)finishBoot();if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
- const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','recruiter','clear'];
- const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
+ const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','recruiter','clear'];
+ const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
  const choices=()=>[...ids.map(id=>({command:'cd '+names[id],label:content('.nav a[data-tab="'+id+'"]')||names[id]})),...baseCommands.map(command=>({command,label:labels()[command]}))];
  function help(){return choices().map(x=>x.command.padEnd(23)+' '+x.label).join('\n');}
  function recruiter(){finishBoot();const enabled=root.classList.toggle('recruiter-mode');show(enabled?t('Recruiter-Modus aktiv. Animationen deaktiviert.','Recruiter mode enabled. Animations disabled.'):t('Normaler Portfolio-Modus aktiv.','Normal portfolio mode enabled.'));}
  async function github(){
    const id=++request;show(t('Öffentliche GitHub-Daten werden abgerufen …','Fetching public GitHub data …'));
    try{
-     const r=await fetch('https://api.github.com/users/FernGro/repos?sort=updated&per_page=30',{credentials:'omit',headers:{Accept:'application/vnd.github+json'}});
-     if(!r.ok)throw Error('HTTP '+r.status);
-     const data=await r.json();if(!Array.isArray(data))throw Error('response');
+     const responses=await Promise.allSettled(['Resumee','TIAExporter','GartenWebApp'].map(async name=>{const r=await fetch('https://api.github.com/repos/FernGro/'+name,{credentials:'omit',headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw Error('HTTP '+r.status);return r.json();}));
      if(id!==request)return;
-     const selected=data.filter(x=>['Resumee','TIAExporter','GartenWebApp'].some(n=>n.toLowerCase()===String(x.name).toLowerCase()));
+     const selected=responses.filter(x=>x.status==='fulfilled').map(x=>x.value);
+     if(!selected.length)throw Error('No public repository response');
      show(selected.length?selected.map(x=>x.name+'  |  '+(x.language||'—')+'  |  '+t('aktualisiert','updated')+' '+new Intl.DateTimeFormat(de()?'de-DE':'en-GB',{dateStyle:'medium'}).format(new Date(x.updated_at))+'\n'+x.html_url).join('\n\n'):t('Keine ausgewählten öffentlichen Projekte gefunden.','No selected public projects found.'));
    }catch(err){if(id===request)show(t('GitHub derzeit nicht erreichbar. Öffentliche Projekte:','GitHub currently unavailable. Public projects:')+'\nhttps://github.com/FernGro');}
  }
@@ -979,7 +980,7 @@ function portfolioTerminal(){
    const [verb,...args]=cmd.split(/\s+/),arg=args.join(' '),v=verb.toLowerCase();
    if(v==='help'||v==='?'){show(help());return;}
    if(v==='ls'){show(ids.map(id=>names[id]+'/').join('  '));return;}
-   if(v==='clear'){status.textContent='';return;}
+   if(v==='clear'){clearInterval(typing);status.textContent='';return;}
    if(v==='cd'||v==='open'){const id=resolve(arg||'Resumee');if(id)navigate(id);else show(t('Unbekannter Bereich. Nutze ls.','Unknown directory. Use ls.'));return;}
    if(v==='whoami'){show(content('#overview h1')+'\n'+content('#overview .role'));return;}
    if(v==='cat'&&['profile','resume','resumee','about'].includes(arg.toLowerCase())){show(content('#overview .intro'));return;}
@@ -988,6 +989,7 @@ function portfolioTerminal(){
    if(v==='pdf'){document.querySelector('header [data-pdf]').click();show(t('PDF-Export ausgelöst.','PDF export requested.'));return;}
    if(v==='git'&&arg.toLowerCase()==='status'){github();return;}
    if(v==='run'&&arg.toLowerCase()==='security-analysis'){securityDemo();return;}
+   if(v==='timeline'){const rows=[...document.querySelectorAll('#professional .entry,#education .edu')].map(n=>[n.querySelector('.date,.year')?.textContent.trim(),n.querySelector('h3')?.textContent.trim()].filter(Boolean).join('  |  '));show(rows.join('\n'));return;}
    if(v==='recruiter'){recruiter();return;}
    show(t('Unbekannter Befehl. Gib help ein.','Unknown command. Type help.'));
  }
@@ -1006,7 +1008,7 @@ function portfolioTerminal(){
  if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
  setLanguage();route(current(),{replay:true});root.classList.remove('terminal-preboot');
 }
-portfolioTerminal();
+try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active');document.getElementById('portfolio-terminal')?.classList.remove('is-booting','is-docking');}
 </script>
 </body>
 </html>

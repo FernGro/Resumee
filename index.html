@@ -11,7 +11,7 @@
 <meta property="og:title" content="Christoph Grossklaus — CV &amp; Portfolio">
 <meta property="og:description" content="Software Engineer | AI Automation &amp; Cybersecurity">
 <title>Christoph Grossklaus — CV &amp; Portfolio</title>
-<meta name="portfolio-version" content="10">
+<meta name="portfolio-version" content="11">
 <script>document.documentElement.classList.add("js");try{if((!location.hash||location.hash==="#overview")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&new URLSearchParams(location.search).get("view")!=="recruiter")document.documentElement.classList.add("terminal-preboot");setTimeout(()=>document.documentElement.classList.remove("terminal-preboot"),5000);}catch(e){}</script>
 <style>
 /* ---------- tokens ---------- */
@@ -430,6 +430,18 @@ html{scroll-padding-top:175px}
 #terminal-boot-pointer{z-index:100;opacity:1}
 @media(max-width:920px){.edu,.entry{grid-template-columns:1fr!important;gap:6px!important}.section-head{margin-bottom:24px}.section h2{font-size:clamp(1.9rem,6vw,2.65rem)}}
 }
+
+/* Explicit visitor opt-in overrides OS motion preference ONLY for the intro. */
+@media screen{
+html.intro-motion-override #terminal-boot-pointer:not([hidden]){display:block!important}
+html.intro-motion-override .terminal-caret{animation:terminal-blink .75s steps(1) infinite!important}
+html.intro-motion-override #terminal-boot-pointer.pointer-click span{animation:intro-click-ring .42s ease-out both!important}
+html.intro-motion-override .portfolio-terminal.is-docking #terminal-form,
+html.intro-motion-override .portfolio-terminal.is-docking .terminal-feedback,
+html.intro-motion-override .portfolio-terminal.is-docking #terminal-palette{animation:terminal-arrive 1.65s ease both!important}
+html.intro-motion-override .portfolio-terminal.is-docking .terminal-boot-log,
+html.intro-motion-override .portfolio-terminal.is-docking #terminal-skip{transition:opacity .42s ease!important}
+}
 </style>
 </head>
 <body>
@@ -453,7 +465,7 @@ html{scroll-padding-top:175px}
   </div>
 </header>
 <div class="shell terminal-dock" id="terminal-dock"><section class="portfolio-terminal" id="portfolio-terminal" aria-label="Portfolio terminal">
-  <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh · v10</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
+  <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh · v11</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
   <div class="terminal-boot-log" id="terminal-boot-log" hidden aria-hidden="true"><div class="terminal-welcome">Last login · portfolio</div><div class="boot-prompt"><span class="terminal-user">christoph@portfolio</span><span class="terminal-dir">~</span><span>$</span><span id="terminal-boot-command"></span><span class="terminal-caret"></span></div><div id="terminal-boot-result" hidden></div></div>
   <div id="terminal-boot-pointer" hidden aria-hidden="true"><svg viewBox="0 0 24 28" width="24" height="28"><path d="M2 2 L2 23 L8 17 L13 26 L17 24 L12 15 L22 14 Z" fill="#fff" stroke="#141819" stroke-width="1.6" stroke-linejoin="round"/></svg><span></span></div>
   <form id="terminal-form" autocomplete="off"><span class="terminal-user" aria-hidden="true">christoph@portfolio</span><span id="terminal-path">~/Resumee</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands"><button type="submit" aria-label="Run command" title="Enter">↵</button></form>
@@ -993,13 +1005,18 @@ function portfolioTerminal(){
  const macClose=document.getElementById("mac-close"),macMin=document.getElementById("mac-minimize"),macZoom=document.getElementById("mac-zoom"),reopen=document.getElementById("terminal-reopen"),pointer=document.getElementById("terminal-boot-pointer");
  const INTRO={lead:600,keyDelays:[180,170,210,230,180,200,160,200,185,205],enterPause:550,readPause:750,pointerTravel:1100,clickPause:300,dock:1650};
  let introFrame=0,bootGeneration=0;
+ const params=new URLSearchParams(location.search);
+ function readIntroPreference(){try{return localStorage.getItem("resumee-intro-motion")==="on";}catch(e){return false;}}
+ let introOptIn=readIntroPreference();
+ function enableIntro(){introOptIn=true;try{localStorage.setItem("resumee-intro-motion","on");}catch(e){}}
+ function disableIntroOverride(){introOptIn=false;try{localStorage.removeItem("resumee-intro-motion");}catch(e){}}
  function content(q){const n=document.querySelector(q);return (n?.innerText||n?.textContent||'').trim();}
  function show(text){output.textContent=text;output.hidden=false;close.hidden=false;}
  function hide(){request++;output.hidden=true;close.hidden=true;output.textContent='';}
  function animateCommand(command){clearInterval(typing);status.textContent='';if(reduced()||root.classList.contains('recruiter-mode')){status.textContent=command;return;}let n=0;typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},24);}
  function setLanguage(){for(const [button,label] of [[macClose,t('Terminal schließen','Close terminal')],[macMin,t('Terminal minimieren','Minimize terminal')],[macZoom,t('Terminal vergrößern / wiederherstellen','Maximize / restore terminal')],[reopen,t('Terminal öffnen','Open terminal')]]){button.title=label;button.setAttribute('aria-label',label);}input.placeholder=t('help für Befehle','type help for commands');input.setAttribute('aria-label',t('Terminalbefehl','Terminal command'));skip.textContent=t('Überspringen','Skip intro');close.setAttribute('aria-label',t('Ausgabe schließen','Close output'));key.setAttribute('aria-label',t('Befehlssuche öffnen','Open command palette'));search.placeholder=t('Befehle und Bereiche suchen …','Search commands and sections …');document.getElementById('palette-title').textContent=t('Befehle','Commands');document.getElementById('palette-dismiss').setAttribute('aria-label',t('Schließen','Close'));if(palette.open)renderPalette();}
  function finishBoot(){
-   const was=bootRunning;bootRunning=false;bootGeneration++;cancelAnimationFrame(introFrame);introFrame=0;bootTimers.forEach(clearTimeout);bootTimers=[];
+   const was=bootRunning;bootRunning=false;root.classList.remove('intro-motion-override');bootGeneration++;cancelAnimationFrame(introFrame);introFrame=0;bootTimers.forEach(clearTimeout);bootTimers=[];
    if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}
    win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');pointer.hidden=true;pointer.classList.remove('pointer-click');pointer.style.removeProperty('transform');pointer.style.removeProperty('transition');macMin.classList.remove('intro-hover','intro-pressed');dock.style.removeProperty('min-height');
    win.style.removeProperty('top');win.style.removeProperty('left');win.style.removeProperty('width');win.style.removeProperty('height');
@@ -1051,7 +1068,9 @@ function portfolioTerminal(){
  function boot({force=false}={}){
    finishBoot();setWindow('normal');hide();clearInterval(typing);
    const command='cd '+names[routeId];status.textContent=command;
-   if(!force&&(reduced()||root.classList.contains('recruiter-mode')))return;
+   if(force)enableIntro();
+   if(!force&&(root.classList.contains('recruiter-mode')||(reduced()&&!introOptIn)))return;
+   root.classList.add('intro-motion-override');
    returnFocus=document.activeElement;bootRunning=true;
    const height=win.getBoundingClientRect().height;
    dock.style.minHeight=Math.max(86,height)+'px';
@@ -1072,13 +1091,12 @@ function portfolioTerminal(){
      if(elapsed>=mouse){movePointer();return;}
      introFrame=requestAnimationFrame(tick);
    }
-   if(reduced()){bootCommand.textContent=command;bootResult.textContent=t('↵  Bereich geladen.','↵  Section loaded.');bootResult.hidden=false;bootTimers.push(setTimeout(finishBoot,700));return;}
    introFrame=requestAnimationFrame(tick);
  }
  function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){boot();try{window.scrollTo(0,0);}catch(error){}}else{if(bootRunning)finishBoot();if(windowMode==='maximized')setWindow('normal');if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
- const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','intro','version','recruiter','clear'];
- const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),intro:t('Startanimation erneut abspielen','Replay startup animation'),version:t('Geladene Version anzeigen','Show loaded version'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
+ const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','intro','motion auto','version','recruiter','clear'];
+ const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),intro:t('Startanimation erneut abspielen','Replay startup animation'),'motion auto':t('Systemeinstellung für Animationen verwenden','Restore system motion preference'),version:t('Geladene Version anzeigen','Show loaded version'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
  const choices=()=>[...ids.map(id=>({command:'cd '+names[id],label:content('.nav a[data-tab="'+id+'"]')||names[id]})),...baseCommands.map(command=>({command,label:labels()[command]}))];
  function help(){return choices().map(x=>x.command.padEnd(23)+' '+x.label).join('\n');}
  function recruiter(){finishBoot();const enabled=root.classList.toggle('recruiter-mode');show(enabled?t('Recruiter-Modus aktiv. Animationen deaktiviert.','Recruiter mode enabled. Animations disabled.'):t('Normaler Portfolio-Modus aktiv.','Normal portfolio mode enabled.'));}
@@ -1114,8 +1132,9 @@ function portfolioTerminal(){
    if(v==='git'&&arg.toLowerCase()==='status'){github();return;}
    if(v==='run'&&arg.toLowerCase()==='security-analysis'){securityDemo();return;}
    if(v==='timeline'){const rows=[...document.querySelectorAll('#professional .entry,#education .edu')].map(n=>[n.querySelector('.date,.year')?.textContent.trim(),n.querySelector('h3')?.textContent.trim()].filter(Boolean).join('  |  '));show(rows.join('\n'));return;}
-   if(v==='intro'){boot({force:true});return;}
-   if(v==='version'){show('Resumee v10 · frame-driven intro · 2026-11-25');return;}
+   if(v==='intro'){root.classList.remove('recruiter-mode');boot({force:true});return;}
+   if(v==='motion'&&arg.toLowerCase()==='auto'){disableIntroOverride();show(t('Systemeinstellung für Animationen wieder aktiv.','System motion preference restored.'));return;}
+   if(v==='version'){show('Resumee v11 · explicit intro override · 2026-11-25');return;}
    if(v==='recruiter'){recruiter();return;}
    show(t('Unbekannter Befehl. Gib help ein.','Unknown command. Type help.'));
  }
@@ -1133,7 +1152,7 @@ function portfolioTerminal(){
  window.addEventListener('pageshow',e=>{if(e.persisted&&current()==='overview')boot();});
  new MutationObserver(setLanguage).observe(root,{attributes:true,attributeFilter:['lang']});
  if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
- setLanguage();const initial=current(),force=new URLSearchParams(location.search).get('intro')==='1';prompt.textContent='~/'+names[initial];if(initial==='overview'||force)boot({force});else status.textContent='cd '+names[initial];root.classList.remove('terminal-preboot');
+ setLanguage();const initial=current(),force=params.get('intro')==='1'&&!root.classList.contains('recruiter-mode');prompt.textContent='~/'+names[initial];if(initial==='overview'||force)boot({force});else status.textContent='cd '+names[initial];root.classList.remove('terminal-preboot');
 }
 try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active','terminal-maximized');const terminal=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock');if(terminal&&dock){terminal.classList.remove('is-booting','is-docking','is-maximized');if(terminal.parentNode!==dock)dock.prepend(terminal);}}
 </script>

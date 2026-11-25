@@ -6,7 +6,20 @@ Bilingual, responsive CV website (DE / EN), hosted on GitHub Pages. All images a
 
 https://ferngro.github.io/Resumee/
 
-Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually. The terminal boot animation runs on each entry to the overview and respects reduced-motion preferences; use Escape or Skip to dismiss.5 seconds, can be skipped (including Escape), and is suppressed for reduced motion or direct section links. The avatar uses the original embedded outdoor portrait. The integrated terminal supports help, ls, cd, open, whoami, cat profile, status, contact, pdf and clear. Commands navigate or read live page content; no shell or eval is exposed.
+Select a language via the toolbar or `?lang=de` / `?lang=en`. The theme follows the OS unless changed manually.
+
+## Interactive terminal
+
+On entry to the overview, the same terminal element initially fills the viewport, types `cd Resumee` letter by letter, acknowledges Enter and animates to its measured dock below the header. The full sequence takes about 2.5 seconds. Escape or Skip dismisses it. Section changes animate the corresponding `cd` command; reduced-motion preferences and direct section links avoid the full intro.
+
+Type `help` or open the searchable command palette with Ctrl/Cmd+K. Supported commands include `ls`, `cd projects`, `open Resumee`, `whoami`, `cat profile`, `status`, `contact`, `pdf`, `timeline`, `git status`, `run security-analysis`, `recruiter` and `clear`. All commands are explicitly handled; no arbitrary shell or eval is exposed.
+
+- `git status`: fetches public metadata for three selected repositories only when requested; no token, fallback on API failure.
+- `run security-analysis`: interactive deterministic example using synthetic firmware versions, not a real advisory or LLM.
+- `timeline`: reads the current education and experience entries.
+- `?view=recruiter`: opens a quiet version without the intro or motion. The terminal command toggles quiet mode during the current visit.
+
+The terminal stays compact; output is shown on demand and dismissible.
 
 ## CV and PDF export
 
@@ -28,3 +41,5 @@ The previous static PDF build workflow is obsolete. `tools/build_pdfs.py` now ex
 ## Verification
 
 Runtime date boundary cases and simulated lossless pagination were checked when implementing the generator. The terminal redesign was checked with the actual PDF drawing function, representative German text, cross-reference offsets, and synthetic image-resource wiring. Live browser rendering, actual portrait conversion, Safari/iOS downloads, and visual print layout still need regression testing.
+
+Terminal v5 verification: all inline scripts parsed; stub-DOM tests exercised initial typing, measured dock target, cleanup, route changes, replay, skip and help. Real-browser CSS animation, Safari/iOS and the public deployment still require visual end-to-end verification.

@@ -339,9 +339,9 @@ html{scroll-padding-top:175px}
 .boot-prompt{display:flex;align-items:baseline;flex-wrap:wrap;gap:.5em}
 .terminal-caret{display:inline-block;width:.55em;height:1em;background:#8ce4b2;align-self:center;animation:terminal-blink .75s steps(1) infinite}
 #terminal-boot-result{color:#8ce4b2;margin-top:10px;font-size:.8em}
-.portfolio-terminal.is-docking .terminal-boot-log,.portfolio-terminal.is-docking #terminal-skip{opacity:0;transition:opacity .18s ease}
+.portfolio-terminal.is-docking .terminal-boot-log,.portfolio-terminal.is-docking #terminal-skip{opacity:0;transition:opacity .42s ease}
 .portfolio-terminal.is-docking .terminal-titlebar{min-height:27px;padding:3px 12px;font-size:10px;transition:padding .4s,min-height .4s}
-.portfolio-terminal.is-docking #terminal-form,.portfolio-terminal.is-docking .terminal-feedback,.portfolio-terminal.is-docking #terminal-palette{visibility:visible;animation:terminal-arrive .68s ease both}
+.portfolio-terminal.is-docking #terminal-form,.portfolio-terminal.is-docking .terminal-feedback,.portfolio-terminal.is-docking #terminal-palette{visibility:visible;animation:terminal-arrive 1.25s ease both}
 @keyframes terminal-arrive{0%,55%{opacity:0}100%{opacity:1}}
 .hero{overflow:visible;padding:36px 0 54px!important}.hero:after,.hero:before{display:none!important}
 .hero-grid{background:transparent;border:0;box-shadow:none;border-radius:0;padding:0;gap:clamp(24px,5vw,65px)}
@@ -400,6 +400,19 @@ html{scroll-padding-top:175px}
   .mobile-nav.keyboard-hidden,.boot-active .mobile-nav,.terminal-maximized .mobile-nav,.terminal-preboot .mobile-nav{visibility:hidden;pointer-events:none}
   footer{padding-bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 }
+
+/* V8 — deliberate typing, visible pointer click and soft docking. */
+@media screen{
+#terminal-boot-pointer{position:absolute;left:0;top:0;z-index:5;width:24px;height:28px;pointer-events:none;will-change:transform;filter:drop-shadow(0 2px 3px #0007)}
+#terminal-boot-pointer svg{display:block}
+#terminal-boot-pointer span{position:absolute;left:-12px;top:-12px;width:28px;height:28px;border:2px solid #f4bf4f;border-radius:50%;opacity:0;transform:scale(.5)}
+#terminal-boot-pointer.pointer-click span{animation:intro-click-ring .42s ease-out both}
+@keyframes intro-click-ring{0%{opacity:.9;transform:scale(.45)}100%{opacity:0;transform:scale(1.5)}}
+.terminal-titlebar #mac-minimize.intro-hover{color:#24302b;filter:brightness(1.13)}
+.terminal-titlebar #mac-minimize.intro-pressed{color:#24302b;transform:scale(.84);filter:brightness(.87)}
+.portfolio-terminal.is-docking .terminal-titlebar{transition:padding .8s,min-height .8s}
+@media(prefers-reduced-motion:reduce){#terminal-boot-pointer{display:none!important}}
+}
 </style>
 </head>
 <body>
@@ -425,6 +438,7 @@ html{scroll-padding-top:175px}
 <div class="shell terminal-dock" id="terminal-dock"><section class="portfolio-terminal" id="portfolio-terminal" aria-label="Portfolio terminal">
   <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
   <div class="terminal-boot-log" id="terminal-boot-log" hidden aria-hidden="true"><div class="terminal-welcome">Last login · portfolio</div><div class="boot-prompt"><span class="terminal-user">christoph@portfolio</span><span class="terminal-dir">~</span><span>$</span><span id="terminal-boot-command"></span><span class="terminal-caret"></span></div><div id="terminal-boot-result" hidden></div></div>
+  <div id="terminal-boot-pointer" hidden aria-hidden="true"><svg viewBox="0 0 24 28" width="24" height="28"><path d="M2 2 L2 23 L8 17 L13 26 L17 24 L12 15 L22 14 Z" fill="#fff" stroke="#141819" stroke-width="1.6" stroke-linejoin="round"/></svg><span></span></div>
   <form id="terminal-form" autocomplete="off"><span class="terminal-user" aria-hidden="true">christoph@portfolio</span><span id="terminal-path">~/Resumee</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands"><button type="submit" aria-label="Run command" title="Enter">↵</button></form>
   <div class="terminal-feedback"><span class="terminal-last-prompt" aria-hidden="true">$</span><span id="terminal-status" aria-hidden="true"></span><button type="button" id="terminal-close" hidden aria-label="Close output">×</button></div>
   <div id="terminal-output" role="status" hidden></div>
@@ -959,7 +973,8 @@ function portfolioTerminal(){
  const source=document.querySelector('#overview .hero-photo img'),brand=document.querySelector('.brandmark b');
  if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
  let routeId=current(),bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,motion=null,request=0,returnFocus=null,windowMode="normal";
- const macClose=document.getElementById("mac-close"),macMin=document.getElementById("mac-minimize"),macZoom=document.getElementById("mac-zoom"),reopen=document.getElementById("terminal-reopen");
+ const macClose=document.getElementById("mac-close"),macMin=document.getElementById("mac-minimize"),macZoom=document.getElementById("mac-zoom"),reopen=document.getElementById("terminal-reopen"),pointer=document.getElementById("terminal-boot-pointer");
+ const INTRO={lead:520,keyDelays:[155,145,185,200,145,165,135,170,155,175],enterPause:450,readPause:720,pointerTravel:860,clickPause:190,dock:1250};
  function content(q){const n=document.querySelector(q);return (n?.innerText||n?.textContent||'').trim();}
  function show(text){output.textContent=text;output.hidden=false;close.hidden=false;}
  function hide(){request++;output.hidden=true;close.hidden=true;output.textContent='';}
@@ -968,7 +983,7 @@ function portfolioTerminal(){
  function finishBoot(){
    const was=bootRunning;bootRunning=false;bootTimers.forEach(clearTimeout);bootTimers=[];
    if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}
-   win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');
+   win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');pointer.hidden=true;pointer.classList.remove('pointer-click');pointer.style.removeProperty('transform');pointer.style.removeProperty('transition');macMin.classList.remove('intro-hover','intro-pressed');dock.style.removeProperty('min-height');
    win.style.removeProperty('top');win.style.removeProperty('left');win.style.removeProperty('width');win.style.removeProperty('height');
    if(win.parentNode!==dock)dock.insertBefore(win,reopen);
    skip.hidden=true;bootLog.hidden=true;form.inert=false;key.inert=false;
@@ -990,22 +1005,48 @@ function portfolioTerminal(){
    if(!target.width||!target.height||typeof win.animate!=='function'){finishBoot();return;}
    win.classList.add('is-docking');
    try{
-     motion=win.animate([{top:from.top+'px',left:from.left+'px',width:from.width+'px',height:from.height+'px',borderRadius:'0px'},{top:target.top+'px',left:target.left+'px',width:target.width+'px',height:target.height+'px',borderRadius:'10px'}],{duration:680,easing:'cubic-bezier(.65,0,.18,1)',fill:'forwards'});
+     motion=win.animate([{top:from.top+'px',left:from.left+'px',width:from.width+'px',height:from.height+'px',borderRadius:'0px'},{top:target.top+'px',left:target.left+'px',width:target.width+'px',height:target.height+'px',borderRadius:'10px'}],{duration:INTRO.dock,easing:'cubic-bezier(.45,.02,.12,1)',fill:'forwards'});
      motion.onfinish=finishBoot;motion.oncancel=finishBoot;
-     bootTimers.push(setTimeout(finishBoot,850));
+     bootTimers.push(setTimeout(finishBoot,INTRO.dock+250));
    }catch(error){finishBoot();}
+ }
+ function movePointer(){
+   if(!bootRunning)return;
+   if(reduced()){finishBoot();return;}
+   const frame=win.getBoundingClientRect(),target=macMin.getBoundingClientRect();
+   const x=target.left-frame.left+target.width/2,y=target.top-frame.top+target.height/2;
+   const startX=Math.max(42,Math.min(frame.width*.46,frame.width-35)),startY=Math.max(65,frame.height*.43);
+   pointer.hidden=false;pointer.style.transition='none';pointer.style.transform='translate3d('+startX+'px,'+startY+'px,0)';
+   // Force the starting coordinates to be painted before setting the destination.
+   pointer.getBoundingClientRect();
+   pointer.style.transition='transform '+INTRO.pointerTravel+'ms cubic-bezier(.36,.05,.19,1), opacity 180ms ease';
+   pointer.style.transform='translate3d('+x+'px,'+y+'px,0)';
+   bootTimers.push(setTimeout(()=>{if(bootRunning)macMin.classList.add('intro-hover');},INTRO.pointerTravel-90));
+   bootTimers.push(setTimeout(()=>{
+     if(!bootRunning)return;
+     pointer.classList.add('pointer-click');macMin.classList.add('intro-pressed');
+     bootTimers.push(setTimeout(()=>{if(bootRunning)macMin.click();},INTRO.clickPause));
+   },INTRO.pointerTravel+100));
  }
  function boot({force=false}={}){
    finishBoot();setWindow('normal');hide();clearInterval(typing);status.textContent='cd Resumee';
    if(!force&&(reduced()||root.classList.contains('recruiter-mode')))return;
-   returnFocus=document.activeElement;bootRunning=true;root.classList.add('boot-active');win.classList.add('is-booting');skip.hidden=false;bootLog.hidden=false;form.inert=true;key.inert=true;
+   returnFocus=document.activeElement;bootRunning=true;
+   // Reserve the real dock height even on mobile while the same element is fullscreen.
+   const height=win.getBoundingClientRect().height;
+   dock.style.minHeight=Math.max(86,height)+'px';
+   root.classList.add('boot-active');win.classList.add('is-booting');skip.hidden=false;bootLog.hidden=false;form.inert=true;key.inert=true;
    document.body.appendChild(win);
-   bootCommand.textContent='';bootResult.textContent='';bootResult.hidden=true;
+   bootCommand.textContent='';bootResult.textContent='';bootResult.hidden=true;pointer.hidden=true;
    const command='cd Resumee';
-   const interval=reduced()?0:95;
-   for(let i=1;i<=command.length;i++)bootTimers.push(setTimeout(()=>bootCommand.textContent=command.slice(0,i),230+i*interval));
-   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},230+command.length*interval+160));
-   bootTimers.push(setTimeout(()=>{if(reduced())finishBoot();else dockBoot();},230+command.length*interval+580));
+   let delay=reduced()?100:INTRO.lead;
+   for(let i=1;i<=command.length;i++){
+     delay+=reduced()?0:INTRO.keyDelays[i-1]||160;
+     bootTimers.push(setTimeout(()=>{bootCommand.textContent=command.slice(0,i);},delay));
+   }
+   delay+=reduced()?0:INTRO.enterPause;
+   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},delay));
+   bootTimers.push(setTimeout(()=>{if(reduced())finishBoot();else movePointer();},delay+(reduced()?300:INTRO.readPause)));
  }
  function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){boot();try{window.scrollTo(0,0);}catch(error){}}else{if(bootRunning)finishBoot();if(windowMode==='maximized')setWindow('normal');if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
@@ -1054,7 +1095,7 @@ function portfolioTerminal(){
  function openPalette(){if(bootRunning)finishBoot();if(windowMode==='closed'||windowMode==='minimized')setWindow('normal');if(typeof palette.showModal!=='function'){input.focus();show(help());return;}if(palette.open)return;search.value='';renderPalette();palette.showModal();search.focus();}
  form.addEventListener('submit',e=>{e.preventDefault();const cmd=input.value;input.value='';run(cmd);});
  input.addEventListener('keydown',e=>{if(e.key==='ArrowUp'&&historyIndex>0){e.preventDefault();input.value=history[--historyIndex];}else if(e.key==='ArrowDown'){e.preventDefault();historyIndex=Math.min(historyIndex+1,history.length);input.value=history[historyIndex]||'';}});
- macClose.addEventListener('click',()=>{setWindow('closed');reopen.focus();});macMin.addEventListener('click',()=>setWindow(windowMode==='minimized'?'normal':'minimized'));macZoom.addEventListener('click',()=>setWindow(windowMode==='maximized'?'normal':'maximized'));reopen.addEventListener('click',()=>{setWindow('normal');input.focus();});
+ macClose.addEventListener('click',()=>{setWindow('closed');reopen.focus();});macMin.addEventListener('click',()=>{if(bootRunning){pointer.hidden=true;macMin.classList.remove('intro-hover','intro-pressed');if(!motion)dockBoot();return;}setWindow(windowMode==='minimized'?'normal':'minimized');});macZoom.addEventListener('click',()=>setWindow(windowMode==='maximized'?'normal':'maximized'));reopen.addEventListener('click',()=>{setWindow('normal');input.focus();});
  skip.addEventListener('click',finishBoot);close.addEventListener('click',hide);key.addEventListener('click',openPalette);search.addEventListener('input',renderPalette);search.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();results.querySelector('button')?.click();}else if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('button')?.focus();}});document.getElementById('palette-dismiss').addEventListener('click',()=>palette.close());
  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();}else if(e.key==='Escape'&&bootRunning)finishBoot();else if(e.key==='Escape'&&windowMode==='maximized'&&!palette.open)setWindow('normal');else if(e.key==='Escape'&&!palette.open)hide();else if(bootRunning&&e.key==='Tab'){e.preventDefault();skip.focus();}});
  document.addEventListener('cv:navigate',e=>route(e.detail.id,{replay:true}));

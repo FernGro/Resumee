@@ -11,6 +11,7 @@
 <meta property="og:title" content="Christoph Grossklaus — CV &amp; Portfolio">
 <meta property="og:description" content="Software Engineer | AI Automation &amp; Cybersecurity">
 <title>Christoph Grossklaus — CV &amp; Portfolio</title>
+<meta name="portfolio-version" content="10">
 <script>document.documentElement.classList.add("js");try{if((!location.hash||location.hash==="#overview")&&!matchMedia("(prefers-reduced-motion: reduce)").matches&&new URLSearchParams(location.search).get("view")!=="recruiter")document.documentElement.classList.add("terminal-preboot");setTimeout(()=>document.documentElement.classList.remove("terminal-preboot"),5000);}catch(e){}</script>
 <style>
 /* ---------- tokens ---------- */
@@ -413,6 +414,22 @@ html{scroll-padding-top:175px}
 .portfolio-terminal.is-docking .terminal-titlebar{transition:padding 1.1s,min-height 1.1s}
 @media(prefers-reduced-motion:reduce){#terminal-boot-pointer{display:none!important}}
 }
+
+/* V10 — single timeline rail, no pill boxes, lighter editorial layout. */
+@media screen{
+.section-head{grid-template-columns:1fr;gap:10px;margin-bottom:38px}
+.section h2{font-size:clamp(2.1rem,3.6vw,3.25rem);line-height:1.08;letter-spacing:-.04em}
+.section-intro{margin-top:8px}
+.edu-list,.timeline{border-top:0;border-left:1px solid var(--line);margin-left:4px}
+.timeline .entry,.edu-list .edu{border:0;padding:18px 0 22px 23px;gap:24px}
+.timeline .entry:before,.edu-list .edu:before{display:none}
+.timeline .entry:after,.edu-list .edu:after{left:-4px;top:24px}
+.edu .status,.status{border:0!important;border-radius:0!important;background:transparent!important;padding:3px 0;color:var(--muted);font-size:.75rem;font-weight:600;white-space:normal}
+.edu{grid-template-columns:150px minmax(0,1fr) auto}
+.terminal-dock{margin-top:12px}
+#terminal-boot-pointer{z-index:100;opacity:1}
+@media(max-width:920px){.edu,.entry{grid-template-columns:1fr!important;gap:6px!important}.section-head{margin-bottom:24px}.section h2{font-size:clamp(1.9rem,6vw,2.65rem)}}
+}
 </style>
 </head>
 <body>
@@ -436,7 +453,7 @@ html{scroll-padding-top:175px}
   </div>
 </header>
 <div class="shell terminal-dock" id="terminal-dock"><section class="portfolio-terminal" id="portfolio-terminal" aria-label="Portfolio terminal">
-  <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
+  <div class="terminal-titlebar"><span class="terminal-lights"><button type="button" id="mac-close" aria-label="Close terminal" title="Close terminal">×</button><button type="button" id="mac-minimize" aria-label="Minimize terminal" title="Minimize terminal">−</button><button type="button" id="mac-zoom" aria-label="Maximize terminal" title="Maximize terminal">+</button></span><span class="terminal-title">christoph@portfolio — zsh · v10</span><button type="button" id="terminal-skip" hidden>Skip intro</button><button type="button" id="terminal-palette" aria-label="Open command palette" title="Ctrl / Cmd + K">⌘ K</button></div>
   <div class="terminal-boot-log" id="terminal-boot-log" hidden aria-hidden="true"><div class="terminal-welcome">Last login · portfolio</div><div class="boot-prompt"><span class="terminal-user">christoph@portfolio</span><span class="terminal-dir">~</span><span>$</span><span id="terminal-boot-command"></span><span class="terminal-caret"></span></div><div id="terminal-boot-result" hidden></div></div>
   <div id="terminal-boot-pointer" hidden aria-hidden="true"><svg viewBox="0 0 24 28" width="24" height="28"><path d="M2 2 L2 23 L8 17 L13 26 L17 24 L12 15 L22 14 Z" fill="#fff" stroke="#141819" stroke-width="1.6" stroke-linejoin="round"/></svg><span></span></div>
   <form id="terminal-form" autocomplete="off"><span class="terminal-user" aria-hidden="true">christoph@portfolio</span><span id="terminal-path">~/Resumee</span><span class="terminal-prompt" aria-hidden="true">$</span><input id="terminal-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Portfolio terminal command" placeholder="type help for commands"><button type="submit" aria-label="Run command" title="Enter">↵</button></form>
@@ -974,14 +991,15 @@ function portfolioTerminal(){
  if(source&&brand){const avatar=document.createElement('img');avatar.src=source.getAttribute('src');avatar.alt='';brand.replaceChildren(avatar);}
  let routeId=current(),bootTimers=[],typing=0,history=[],historyIndex=0,bootRunning=false,motion=null,request=0,returnFocus=null,windowMode="normal";
  const macClose=document.getElementById("mac-close"),macMin=document.getElementById("mac-minimize"),macZoom=document.getElementById("mac-zoom"),reopen=document.getElementById("terminal-reopen"),pointer=document.getElementById("terminal-boot-pointer");
- const INTRO={lead:650,keyDelays:[185,175,230,260,185,210,170,210,195,220],enterPause:550,readPause:850,pointerTravel:1050,clickPause:240,dock:1650};
+ const INTRO={lead:600,keyDelays:[180,170,210,230,180,200,160,200,185,205],enterPause:550,readPause:750,pointerTravel:1100,clickPause:300,dock:1650};
+ let introFrame=0,bootGeneration=0;
  function content(q){const n=document.querySelector(q);return (n?.innerText||n?.textContent||'').trim();}
  function show(text){output.textContent=text;output.hidden=false;close.hidden=false;}
  function hide(){request++;output.hidden=true;close.hidden=true;output.textContent='';}
  function animateCommand(command){clearInterval(typing);status.textContent='';if(reduced()||root.classList.contains('recruiter-mode')){status.textContent=command;return;}let n=0;typing=setInterval(()=>{status.textContent=command.slice(0,++n);if(n>=command.length)clearInterval(typing);},24);}
  function setLanguage(){for(const [button,label] of [[macClose,t('Terminal schließen','Close terminal')],[macMin,t('Terminal minimieren','Minimize terminal')],[macZoom,t('Terminal vergrößern / wiederherstellen','Maximize / restore terminal')],[reopen,t('Terminal öffnen','Open terminal')]]){button.title=label;button.setAttribute('aria-label',label);}input.placeholder=t('help für Befehle','type help for commands');input.setAttribute('aria-label',t('Terminalbefehl','Terminal command'));skip.textContent=t('Überspringen','Skip intro');close.setAttribute('aria-label',t('Ausgabe schließen','Close output'));key.setAttribute('aria-label',t('Befehlssuche öffnen','Open command palette'));search.placeholder=t('Befehle und Bereiche suchen …','Search commands and sections …');document.getElementById('palette-title').textContent=t('Befehle','Commands');document.getElementById('palette-dismiss').setAttribute('aria-label',t('Schließen','Close'));if(palette.open)renderPalette();}
  function finishBoot(){
-   const was=bootRunning;bootRunning=false;bootTimers.forEach(clearTimeout);bootTimers=[];
+   const was=bootRunning;bootRunning=false;bootGeneration++;cancelAnimationFrame(introFrame);introFrame=0;bootTimers.forEach(clearTimeout);bootTimers=[];
    if(motion){motion.onfinish=null;motion.oncancel=null;motion.cancel();motion=null;}
    win.classList.remove('is-booting','is-docking');root.classList.remove('terminal-preboot','boot-active');pointer.hidden=true;pointer.classList.remove('pointer-click');pointer.style.removeProperty('transform');pointer.style.removeProperty('transition');macMin.classList.remove('intro-hover','intro-pressed');dock.style.removeProperty('min-height');
    win.style.removeProperty('top');win.style.removeProperty('left');win.style.removeProperty('width');win.style.removeProperty('height');
@@ -1012,46 +1030,55 @@ function portfolioTerminal(){
  }
  function movePointer(){
    if(!bootRunning)return;
-   if(reduced()){finishBoot();return;}
    const frame=win.getBoundingClientRect(),target=macMin.getBoundingClientRect();
    const x=target.left-frame.left+target.width/2,y=target.top-frame.top+target.height/2;
    const startX=Math.max(42,Math.min(frame.width*.46,frame.width-35)),startY=Math.max(65,frame.height*.43);
-   pointer.hidden=false;pointer.style.transition='none';pointer.style.transform='translate3d('+startX+'px,'+startY+'px,0)';
-   // Force the starting coordinates to be painted before setting the destination.
-   pointer.getBoundingClientRect();
-   pointer.style.transition='transform '+INTRO.pointerTravel+'ms cubic-bezier(.36,.05,.19,1), opacity 180ms ease';
-   pointer.style.transform='translate3d('+x+'px,'+y+'px,0)';
-   bootTimers.push(setTimeout(()=>{if(bootRunning)macMin.classList.add('intro-hover');},INTRO.pointerTravel-90));
-   bootTimers.push(setTimeout(()=>{
-     if(!bootRunning)return;
+   pointer.hidden=false;pointer.style.transition='none';
+   const gen=bootGeneration;
+   let elapsed=0,last=null;
+   function tick(now){
+     if(!bootRunning||gen!==bootGeneration)return;
+     if(last!==null)elapsed+=Math.min(40,Math.max(0,now-last));last=now;
+     const p=Math.min(1,elapsed/INTRO.pointerTravel),ease=p*p*(3-2*p);
+     pointer.style.transform='translate3d('+(startX+(x-startX)*ease)+'px,'+(startY+(y-startY)*ease)+'px,0)';
+     if(p>.88)macMin.classList.add('intro-hover');
+     if(p<1){introFrame=requestAnimationFrame(tick);return;}
      pointer.classList.add('pointer-click');macMin.classList.add('intro-pressed');
-     bootTimers.push(setTimeout(()=>{if(bootRunning)macMin.click();},INTRO.clickPause));
-   },INTRO.pointerTravel+100));
+     bootTimers.push(setTimeout(()=>{if(bootRunning&&gen===bootGeneration)macMin.click();},INTRO.clickPause));
+   }
+   introFrame=requestAnimationFrame(tick);
  }
  function boot({force=false}={}){
-   finishBoot();setWindow('normal');hide();clearInterval(typing);status.textContent='cd Resumee';
+   finishBoot();setWindow('normal');hide();clearInterval(typing);
+   const command='cd '+names[routeId];status.textContent=command;
    if(!force&&(reduced()||root.classList.contains('recruiter-mode')))return;
    returnFocus=document.activeElement;bootRunning=true;
-   // Reserve the real dock height even on mobile while the same element is fullscreen.
    const height=win.getBoundingClientRect().height;
    dock.style.minHeight=Math.max(86,height)+'px';
    root.classList.add('boot-active');win.classList.add('is-booting');skip.hidden=false;bootLog.hidden=false;form.inert=true;key.inert=true;
    document.body.appendChild(win);
    bootCommand.textContent='';bootResult.textContent='';bootResult.hidden=true;pointer.hidden=true;
-   const command='cd Resumee';
-   let delay=reduced()?100:INTRO.lead;
-   for(let i=1;i<=command.length;i++){
-     delay+=reduced()?0:INTRO.keyDelays[i-1]||160;
-     bootTimers.push(setTimeout(()=>{bootCommand.textContent=command.slice(0,i);},delay));
+   // Drive timing from actually displayed frames, not queued background timers.
+   const gen=bootGeneration,keys=[];let at=INTRO.lead;
+   for(let i=0;i<command.length;i++){at+=INTRO.keyDelays[i%INTRO.keyDelays.length];keys.push(at);}
+   const enter=at+INTRO.enterPause,mouse=enter+INTRO.readPause;
+   let elapsed=0,last=null;
+   function tick(now){
+     if(!bootRunning||gen!==bootGeneration)return;
+     if(last!==null)elapsed+=Math.min(40,Math.max(0,now-last));last=now;
+     const n=keys.filter(k=>elapsed>=k).length;
+     bootCommand.textContent=command.slice(0,n);
+     if(elapsed>=enter&&bootResult.hidden){bootResult.textContent=t('↵  Bereich geladen.','↵  Section loaded.');bootResult.hidden=false;}
+     if(elapsed>=mouse){movePointer();return;}
+     introFrame=requestAnimationFrame(tick);
    }
-   delay+=reduced()?0:INTRO.enterPause;
-   bootTimers.push(setTimeout(()=>{bootResult.textContent=t('↵  Lebenslauf geladen.','↵  Résumé loaded.');bootResult.hidden=false;},delay));
-   bootTimers.push(setTimeout(()=>{if(reduced())finishBoot();else movePointer();},delay+(reduced()?300:INTRO.readPause)));
+   if(reduced()){bootCommand.textContent=command;bootResult.textContent=t('↵  Bereich geladen.','↵  Section loaded.');bootResult.hidden=false;bootTimers.push(setTimeout(finishBoot,700));return;}
+   introFrame=requestAnimationFrame(tick);
  }
  function route(id,{replay=false}={}){if(!ids.includes(id))return;const changed=routeId!==id;routeId=id;prompt.textContent='~/'+names[id];if(id==='overview'&&(changed||replay)){boot();try{window.scrollTo(0,0);}catch(error){}}else{if(bootRunning)finishBoot();if(windowMode==='maximized')setWindow('normal');if(changed||replay)animateCommand('cd '+names[id]);}}
  function navigate(id){const a=document.querySelector('.nav a[data-tab="'+id+'"]');if(a&&matchMedia('(min-width: 921px)').matches){a.click();return;}const mob=document.querySelector('#mobileNav a[href="#'+id+'"]');if(mob){mob.click();return;}location.hash=id;}
- const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','intro','recruiter','clear'];
- const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),intro:t('Startanimation erneut abspielen','Replay startup animation'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
+ const baseCommands=['help','ls','whoami','cat profile','status','contact','pdf','git status','run security-analysis','timeline','intro','version','recruiter','clear'];
+ const labels=()=>({help:t('Hilfe anzeigen','Show help'),ls:t('Verzeichnisse auflisten','List directories'),whoami:t('Name und Rolle','Name and role'),'cat profile':t('Kurzprofil lesen','Read profile'),status:t('Verfügbarkeit','Availability'),contact:t('Kontaktdaten','Contact details'),pdf:t('Aktuellen Lebenslauf exportieren','Export current CV'),'git status':t('Öffentliche GitHub-Projekte abrufen','Fetch public GitHub projects'),'run security-analysis':t('Interaktive Security-Demo (synthetische Daten)','Interactive security demo (synthetic data)'),timeline:t('Karrierezeitstrahl anzeigen','Show career timeline'),intro:t('Startanimation erneut abspielen','Replay startup animation'),version:t('Geladene Version anzeigen','Show loaded version'),recruiter:t('Ruhiger Bewerbungsmodus an/aus','Toggle quiet recruiter mode'),clear:t('Ausgabe löschen','Clear output')});
  const choices=()=>[...ids.map(id=>({command:'cd '+names[id],label:content('.nav a[data-tab="'+id+'"]')||names[id]})),...baseCommands.map(command=>({command,label:labels()[command]}))];
  function help(){return choices().map(x=>x.command.padEnd(23)+' '+x.label).join('\n');}
  function recruiter(){finishBoot();const enabled=root.classList.toggle('recruiter-mode');show(enabled?t('Recruiter-Modus aktiv. Animationen deaktiviert.','Recruiter mode enabled. Animations disabled.'):t('Normaler Portfolio-Modus aktiv.','Normal portfolio mode enabled.'));}
@@ -1088,6 +1115,7 @@ function portfolioTerminal(){
    if(v==='run'&&arg.toLowerCase()==='security-analysis'){securityDemo();return;}
    if(v==='timeline'){const rows=[...document.querySelectorAll('#professional .entry,#education .edu')].map(n=>[n.querySelector('.date,.year')?.textContent.trim(),n.querySelector('h3')?.textContent.trim()].filter(Boolean).join('  |  '));show(rows.join('\n'));return;}
    if(v==='intro'){boot({force:true});return;}
+   if(v==='version'){show('Resumee v10 · frame-driven intro · 2026-11-25');return;}
    if(v==='recruiter'){recruiter();return;}
    show(t('Unbekannter Befehl. Gib help ein.','Unknown command. Type help.'));
  }
@@ -1101,11 +1129,11 @@ function portfolioTerminal(){
  document.addEventListener('cv:navigate',e=>route(e.detail.id,{replay:true}));
  document.addEventListener('click',e=>{if(matchMedia('(min-width: 921px)').matches)return;const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(ids.includes(id))route(id,{replay:true});});
  window.addEventListener('hashchange',()=>{if(routeId!==current())route(current());});
- window.addEventListener('resize',()=>{if(motion)finishBoot();});
+ // Safari may dispatch resize during a viewport animation. Do not cancel docking on resize.
  window.addEventListener('pageshow',e=>{if(e.persisted&&current()==='overview')boot();});
  new MutationObserver(setLanguage).observe(root,{attributes:true,attributeFilter:['lang']});
  if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
- setLanguage();const initial=current();prompt.textContent='~/'+names[initial];if(initial==='overview')boot({force:new URLSearchParams(location.search).get('intro')==='1'});else animateCommand('cd '+names[initial]);root.classList.remove('terminal-preboot');
+ setLanguage();const initial=current(),force=new URLSearchParams(location.search).get('intro')==='1';prompt.textContent='~/'+names[initial];if(initial==='overview'||force)boot({force});else status.textContent='cd '+names[initial];root.classList.remove('terminal-preboot');
 }
 try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active','terminal-maximized');const terminal=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock');if(terminal&&dock){terminal.classList.remove('is-booting','is-docking','is-maximized');if(terminal.parentNode!==dock)dock.prepend(terminal);}}
 </script>

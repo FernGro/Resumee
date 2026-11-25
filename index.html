@@ -934,7 +934,9 @@ function wireCV(){
  async function download(e){e.preventDefault();const m=refresh();try{const img=document.querySelector('#overview .hero-photo img');if(img&&!img.complete&&img.decode)await img.decode();const paginated=paginateCV(m,measure);const photo=portraitJPEG(document.querySelector('#overview .hero-photo img'));if(!photo)throw Error('Portrait not ready');const r=makePDF({...paginated,photo},measure),url=URL.createObjectURL(new Blob([r.pdf],{type:'application/pdf'})),a=el('a');a.href=url;a.download='Christoph_Grossklaus_CV_'+root.lang.toUpperCase()+'.pdf';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);}catch(err){console.error(err);printLayout(m);window.print();}}
  document.querySelectorAll('[data-pdf]').forEach(a=>a.addEventListener('click',download));window.addEventListener('beforeprint',()=>printLayout(refresh()));window.addEventListener('pageshow',refresh);document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});new MutationObserver(refresh).observe(root,{attributes:true,attributeFilter:['lang']});refresh();
 }
-wireCV();
+try{wireCV();}catch(error){console.error("CV initialization:",error);}
+</script>
+<script>
 function portfolioTerminal(){
  const root=document.documentElement,win=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock'),form=document.getElementById('terminal-form'),input=document.getElementById('terminal-input'),prompt=document.getElementById('terminal-path'),status=document.getElementById('terminal-status'),output=document.getElementById('terminal-output'),close=document.getElementById('terminal-close'),skip=document.getElementById('terminal-skip'),bootLog=document.getElementById('terminal-boot-log'),bootCommand=document.getElementById('terminal-boot-command'),bootResult=document.getElementById('terminal-boot-result'),key=document.getElementById('terminal-palette'),palette=document.getElementById('command-palette'),search=document.getElementById('command-search'),results=document.getElementById('command-results');
  const ids=['overview','motivation','professional','education','projects','creative'];
@@ -1053,7 +1055,7 @@ function portfolioTerminal(){
  if(new URLSearchParams(location.search).get('view')==='recruiter')root.classList.add('recruiter-mode');
  setLanguage();const initial=current();prompt.textContent='~/'+names[initial];if(initial==='overview')boot({force:new URLSearchParams(location.search).get('intro')==='1'});else animateCommand('cd '+names[initial]);root.classList.remove('terminal-preboot');
 }
-try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active');document.getElementById('portfolio-terminal')?.classList.remove('is-booting','is-docking');}
+try{portfolioTerminal();}catch(error){console.error('Terminal initialization:',error);document.documentElement.classList.remove('terminal-preboot','boot-active','terminal-maximized');const terminal=document.getElementById('portfolio-terminal'),dock=document.getElementById('terminal-dock');if(terminal&&dock){terminal.classList.remove('is-booting','is-docking','is-maximized');if(terminal.parentNode!==dock)dock.prepend(terminal);}}
 </script>
 </body>
 </html>
